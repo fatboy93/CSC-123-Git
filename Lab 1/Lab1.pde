@@ -56,3 +56,9 @@ quad(225,250,140,230,140,270,232,300);//bottom leg
 quad(140,230,115,270,120,310,140,270);//bottom leg
 ellipse(115,290,20,40);//bottom feet
 ellipse(100,220,20,40);//stand alone feet
+fill(#F7F007);
+arc(145,110,60,25,0,PI);
+fill(#F7F007);
+noStroke();
+ellipse(138,75,5,10);
+ellipse(160,75,5,10);
