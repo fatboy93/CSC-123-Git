@@ -62,3 +62,4 @@ fill(#F7F007);
 noStroke();
 ellipse(138,75,5,10);
 ellipse(160,75,5,10);
+save("Lab1.jpg");
