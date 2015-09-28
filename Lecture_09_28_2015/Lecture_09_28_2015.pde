@@ -27,7 +27,7 @@ void setup()  //will run first and run only 1 time.
 
 void draw()  //call 60 times per second but we can't tell
 {
-  background(30);  //this will clear the old pic when you use mousePressed()
+  //background(30);  //this will clear the old pic when you use mousePressed()
                    //it will clear the background every single time it run
                    //because the function will run 60 times/second 
                    
@@ -49,7 +49,7 @@ void draw()  //call 60 times per second but we can't tell
       ellipse(+20, -20, 20, 20);
   popMatrix();  //restore the origin
   
-   x = x-4; // create motion  // x -= 1 // x--
+   //x = x-4; // create motion  // x -= 1 // x--
 }
 
 void mousePressed()  //click - multiply the pic or create a new one
