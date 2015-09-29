@@ -110,11 +110,28 @@ void draw()
       
       //front leg
       fill(#551C00);
-      rect(-20,220,33,40);
-      arc(-4,260,33,6,0,PI);
-      rect(-40,268, 48,15);
+      rect(52,220,33,40);//leg
+      arc(68,260,33,6,0,PI);//curve near leg
+      rect(36,268, 44,15);//shoe
+      ellipse(34,278,8,9);//curve in front
       fill(#F5F4ED);
-     // arc(-40,
+      ellipse(67,268, 20,4);//curve for shoe
+      strokeWeight(5);
+      stroke(#F5F4ED);
+      line(50,268,35,270);//front of shoe
+      noStroke();
+      fill(#F5F4ED);
+      ellipse(60,283,26,6);
+      
+      //clear back
+      rect(125,140,15,40);
+      
+      //back leg
+      fill(#551C00);
+      quad(125,160, 116,205, 140,230,150,207); 
+      quad();
+      
+      
       
       
       
