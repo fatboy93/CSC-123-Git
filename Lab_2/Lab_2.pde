@@ -18,7 +18,7 @@ void draw()
  //Draw the umbrella - rotated
   pushMatrix();
       translate(100,90);  //origin at 100,100
-     // rotate(-PI/6);    //rotate when done with verical
+      rotate(-PI/9);    //rotate when done with verical
       //x=50; y=150;
       
       
@@ -85,15 +85,6 @@ void draw()
       fill(#ED6E6E);  //match with face
       ellipse(48,40,6,8);  //ear
       
-      //draw body
-      fill(#5FA5A3); //match with hat
-      rect(18,58,50,110);
-      rect(0,80,20,50);
-      strokeWeight(6);
-      stroke(#5FA5A3);
-      line(17,75,3,85);
-      noStroke();
-      
       //scarf
       fill(#D6D851);
       rect(68,65,45,20);
@@ -102,9 +93,39 @@ void draw()
       ellipse(112,71,3,10);
       ellipse(100,65,15,3);
       
-      
-      
+      //draw body
+      fill(#5FA5A3); //match with hat
+      rect(18,58,50,130);
+      rect(0,80,20,50);
+      strokeWeight(6);
+      stroke(#5FA5A3);
+      line(17,75,3,85);
+      noStroke();
    popMatrix();
+   
+     translate(100,90);
+      //lower body
+      quad(140, 140, 80,140, 50, 205, 115,205);  
+      quad(115,205,50,205, 50, 220, 105,220);
+      
+      //front leg
+      fill(#551C00);
+      rect(-20,220,33,40);
+      arc(-4,260,33,6,0,PI);
+      rect(-40,268, 48,15);
+      fill(#F5F4ED);
+     // arc(-40,
+      
+      
+      
+      
+      
+      
+ 
+      
+      
+      
+   //popMatrix();
   
   //Draw the man.
   
