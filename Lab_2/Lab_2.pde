@@ -87,6 +87,15 @@ void draw()
       
       //draw body
       fill(#5FA5A3); //match with hat
+      rect(18,58,50,110);
+      rect(0,80,20,50);
+      //arc(15,70,20,20,-PI/2,PI/3);
+      fill(#D6D851);
+      rect(68,65,45,20);
+      fill(#F5F4ED);
+      ellipse(112,71,3,10);
+      ellipse(100,65,15,3);
+      
       
    popMatrix();
   
