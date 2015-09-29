@@ -28,9 +28,10 @@ void draw()
       //arc(x,y,150,150,PI,2*PI);
       arc(0,0,150,150,PI,2*PI);  //big arc
       //triangle(0-10,y-60, x, y-85, x+10, y-60);
+      noStroke();
       triangle(-10,-60, 0, -85, 10, -60);  //top of umbrella
       fill(#F5F4ED);  //fill color backgound
-      noStroke();
+      //noStroke();
       //arc(x-55,y, 39, 15, PI, 2*PI);
       //arc(x-20,y, 40, 15, PI, 2*PI);
       //arc(x+20,y, 40, 15, PI, 2*PI);
@@ -98,9 +99,9 @@ void draw()
       fill(#5FA5A3); //match with hat
       rect(18,58,50,130);
       rect(0,80,20,50);
-      strokeWeight(6);
+      strokeWeight(9);
       stroke(#5FA5A3);
-      line(17,75,3,85);
+      line(17,75,4,85);
       noStroke();
    popMatrix();
    
@@ -109,6 +110,15 @@ void draw()
       //lower body
       quad(140, 140, 80,140, 50, 205, 115,205);  
       quad(115,205,50,205, 50, 220, 105,220);
+      //clear back
+      fill(#F5F4ED);
+      rect(125,140,15,40);
+      
+      strokeWeight(8);
+      stroke(#5FA5A3);
+      line(120,140,160,180);
+      line(160,180,145,200);
+      noStroke();
       
       //front leg
       fill(#551C00);
@@ -125,13 +135,10 @@ void draw()
       fill(#F5F4ED);
       ellipse(60,283,26,6);
       
-      //clear back
-      rect(125,140,15,40);
-      
       //back leg
       fill(#551C00);
       quad(125,160, 116,205, 140,230,150,207); 
-      quad(150,207,140,230, 170,240, 180,215);
+      quad(149,207,139,230, 170,240, 180,215);
       //shoe  ->reuse the shoe above
       pushMatrix();
           rotate(-PI/2.9);    //adjust rotation and translate to fit the back leg
@@ -150,19 +157,28 @@ void draw()
    popMatrix();
    
    //Raindrops
- 
-   pushMatrix();
+   
         //raindrops
         strokeWeight(2);  //create thickness for the raindrop
         stroke(#3EBFAE);  //fill the color for the raindrop
        // fill(#3EBFAE);
-       for(int i=0; i<10; i++)
+       for(int i=0; i<120; i++)
        {
-         x = random(30, width-30);
+         x = random(0, width-30);
          y = random(height-60);
          line(x, y, x+30, y+60);  //draw the line - raindrop
        }
+       
+       
+       y = height;
+       for(int i=0; i<15; i++)
+       {
+         x = random(width);
+         line(x,height-20, x+10, height-60);
+         x = random(width);
+         line(x,height, x+20, height-40);
+       }
        noStroke();
-  popMatrix();
+
 save("Lab2_output.jpg");
 }
