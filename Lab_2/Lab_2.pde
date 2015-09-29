@@ -82,8 +82,11 @@ void draw()
       fill(#582501);  //hair
       rect(40,27,20,12);
       rect(50,37,10,10);
-      fill(#ED6E6E);
-      ellipse(48,40,6,8);
+      fill(#ED6E6E);  //match with face
+      ellipse(48,40,6,8);  //ear
+      
+      //draw body
+      fill(#5FA5A3); //match with hat
       
    popMatrix();
   
