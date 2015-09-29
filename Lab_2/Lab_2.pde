@@ -5,6 +5,7 @@ void setup()
 {
   size(400,400);
   background(#F5F4ED);
+  noLoop();
   //x = random(30, width-30);  //set the value of x,y
  // y = random(height-60);
 }
@@ -149,37 +150,19 @@ void draw()
    popMatrix();
    
    //Raindrops
-   
-          
-          
-          
-          
-          
-          
-      
  
-      
-      
-      
-   //popMatrix();
-  
-  //Draw the man.
-  
-    
-    
-    
-  //background(#F5F4ED);
- 
- // pushMatrix();
-   /* raindrops
-    strokeWeight(2);  //create thickness for the raindrop
-    stroke(#3EBFAE);  //fill the color for the raindrop
-   // fill(#3EBFAE);
-   for(x = random(30, width-30),y = random(height-60);
-       x<width-30 && y<height-60; x++, y++)
-      line(x, y, x+30, y+60);  //draw the line - raindrop
-     */ 
- // popMatrix();
-
-  
+   pushMatrix();
+        //raindrops
+        strokeWeight(2);  //create thickness for the raindrop
+        stroke(#3EBFAE);  //fill the color for the raindrop
+       // fill(#3EBFAE);
+       for(int i=0; i<10; i++)
+       {
+         x = random(30, width-30);
+         y = random(height-60);
+         line(x, y, x+30, y+60);  //draw the line - raindrop
+       }
+       noStroke();
+  popMatrix();
+save("Lab2_output.jpg");
 }
