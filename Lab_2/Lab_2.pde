@@ -103,7 +103,8 @@ void draw()
       noStroke();
    popMatrix();
    
-     translate(100,90);
+   pushMatrix();
+      translate(100,90);
       //lower body
       quad(140, 140, 80,140, 50, 205, 115,205);  
       quad(115,205,50,205, 50, 220, 105,220);
@@ -129,14 +130,32 @@ void draw()
       //back leg
       fill(#551C00);
       quad(125,160, 116,205, 140,230,150,207); 
-      quad();
-      
-      
-      
-      
-      
-      
-      
+      quad(150,207,140,230, 170,240, 180,215);
+      //shoe  ->reuse the shoe above
+      pushMatrix();
+          rotate(-PI/2.9);    //adjust rotation and translate to fit the back leg
+          translate(-185,-4);
+          rect(36,268, 44,15);//shoe
+          ellipse(34,278,8,9);//curve in front
+          fill(#F5F4ED);
+          ellipse(67,268, 20,4);//curve for shoe
+          strokeWeight(5);
+          stroke(#F5F4ED);
+          line(50,268,35,270);//front of shoe
+          noStroke();
+          fill(#F5F4ED);
+          ellipse(60,283,26,6);
+      popMatrix();
+   popMatrix();
+   
+   //Raindrops
+   
+          
+          
+          
+          
+          
+          
       
  
       
