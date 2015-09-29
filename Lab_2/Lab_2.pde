@@ -89,12 +89,19 @@ void draw()
       fill(#5FA5A3); //match with hat
       rect(18,58,50,110);
       rect(0,80,20,50);
-      //arc(15,70,20,20,-PI/2,PI/3);
+      strokeWeight(6);
+      stroke(#5FA5A3);
+      line(17,75,3,85);
+      noStroke();
+      
+      //scarf
       fill(#D6D851);
       rect(68,65,45,20);
+      arc(20,63,15,15,PI/2,2*PI-PI/6); 
       fill(#F5F4ED);
       ellipse(112,71,3,10);
       ellipse(100,65,15,3);
+      
       
       
    popMatrix();
