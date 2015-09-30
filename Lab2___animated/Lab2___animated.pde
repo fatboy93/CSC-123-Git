@@ -1,11 +1,13 @@
 float r,g,b;
 float x=0,y=0,cx,cy, scale_factor = 1;
+color rain_c;
 
 void setup()
 {
-  size(400,400);
+  size(600,600);
   background(#F5F4ED);
   frameRate(35);
+  rain_c = color(random(255),random(255), random(225));
   //noLoop();
   //x = random(30, width-30);  //set the value of x,y
  // y = random(height-60);
@@ -22,7 +24,7 @@ void draw()
  
   pushMatrix();
       translate(x,y);  //important to make body move forward
-      translate(300,90);  //origin at 100,100
+      translate(500,90);  //origin at 100,100
       scale(.5);
       rotate(-PI/9);    //rotate when done with verical
       //x=50; y=150;
@@ -32,9 +34,9 @@ void draw()
       fill(#582501); //fill brown
       //arc(x,y,150,150,PI,2*PI);
       arc(0,0,150,150,PI,2*PI);  //big arc
-      //triangle(0-10,y-60, x, y-85, x+10, y-60);
+      triangle(-15,-60, 0 , -85, +15, -60); //top of umbrella
       noStroke();
-      triangle(-10,-60, 0, +85, +10, -60);  //top of umbrella
+      
       fill(#F5F4ED);  //fill color backgound
       //noStroke();
       //arc(x-55,y, 39, 15, PI, 2*PI);
@@ -113,7 +115,7 @@ void draw()
    
    pushMatrix();
       translate(x,y);
-      translate(300,90);
+      translate(500,90);
       scale(.5);
       //lower body
       quad(+140, +140, +80,+140, +50, +205, +115,+205);  
@@ -166,15 +168,17 @@ void draw()
    popMatrix();
    
    x-=random(-1,4);
-   y += random(-3,3);
+   y += random(-3,5);
    //Raindrops
    
        //raindrops
         strokeWeight(2);  //create thickness for the raindrop
-        stroke(#3EBFAE);  //fill the color for the raindrop
+       // stroke(#3EBFAE);  //fill the color for the raindrop
+       stroke(#2E7CE5);
        // fill(#3EBFAE);
        for(int i=0; i<120; i++)
        {
+         //rain_c = color(random(255),random(255), random(225));
          cx = random(0, width-30);
          cy = random(height-60);
          line(cx, cy, cx+30, cy+60);  //draw the line - raindrop
