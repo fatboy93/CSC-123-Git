@@ -1,3 +1,8 @@
+/*
+  Nghia Nguyen
+  Edward
+  Project 1
+*/
 float r,g,b;
 float x,y,cx,cy, scale_factor;
 color rain_c;
