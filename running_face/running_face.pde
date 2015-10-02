@@ -28,22 +28,22 @@ void draw()
         fill(c3);
         ellipse(c,d+15,30,10);
     popMatrix();
-   if(d > 0 && d < 300 && c >=300 && c <590)
+   if(d > 0 && d < 300 && c >=300 && c <580)
        {
          d++;
          c++;
        }
-   else if(d >= 300 && c >300 && c <= 590)
+   else if(d >= 300 && c >300 && c <= 580)
        {
            d++;
            c--;
        }
-   else if(d <= 590 && d > 300 && c <= 300)
+   else if(d <= 580 && d > 300 && c <= 300)
        {
         d--;
          c--;
        }
-   else 
+   else if(d<=300 && c >=0 && c < 300
       {
          d--;
          c++;
