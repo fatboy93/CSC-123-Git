@@ -1,8 +1,8 @@
 float r,g,b;
-float x=0,y=0,cx,cy, scale_factor = 1;
+float x,y,cx,cy, scale_factor;
 color rain_c;
 float bx,by, kx,ky;
-boolean moving_man, moving_red, moving_blue;
+boolean moving_man, moving_red, moving_blue, back, on_scale;
 
 void setup()
 {
@@ -10,20 +10,19 @@ void setup()
   background(#F5F4ED);
   frameRate(40);
   rain_c = color(random(255),random(255), random(225));
-  
+  x=0;
+  y=0;
   moving_man = false;
   moving_red = false;
   moving_blue = false;
-  bx = -210;
+  back = false;
+  bx = -230;
   by = 250;
-  kx = 700;
+  kx = 650;
   ky = 250;
-  //noLoop();
-  //x = random(30, width-30);  //set the value of x,y
- // y = random(height-60);
+  scale_factor = 0.5;
+  on_scale = false;
 }
-
-
 
 void draw()
 {
@@ -31,15 +30,14 @@ void draw()
   
   pushMatrix();
       translate(bx,by);
+      if(on_scale)
+          scale(random(0.97,1.03));
       fill(107,172,203); //text//
       textSize(27);
       text("UN",22,42);
       fill(107,172,203);
       textSize(37.9);
       text("BOXEUR",40,79);
-     
-    
-      //two man boxing
       
       noStroke();
       
@@ -192,6 +190,8 @@ void draw()
       //2nd boxer//
    pushMatrix();   
      translate(kx,ky);
+     if(on_scale)
+          scale(random(0.97,1.03));
      fill(107,172,203); //text//
      textSize(27);
      text("UN",273,42);
@@ -394,36 +394,26 @@ void draw()
      
      fill(255,251,235);
      triangle(455,175,448,172,442,181);
-     
   popMatrix();
   
-  //
+  // done with the 2 boxers
   
-  //x=100;
- // y=100;
- //Draw the umbrella - rotated
- 
   pushMatrix();
       translate(x,y);  //important to make body move forward
       translate(800,90);  //origin at 100,100
-      scale(.5);
+      scale(scale_factor);
+ //Draw the umbrella - rotated
+ 
+  pushMatrix();
+      
       rotate(-PI/9);    //rotate when done with verical
-      //x=50; y=150;
-      
-      
-      //translate(x,y);
+     
       fill(#582501); //fill brown
-      //arc(x,y,150,150,PI,2*PI);
       arc(0,0,150,150,PI,2*PI);  //big arc
       triangle(-15,-60, 0 , -85, +15, -60); //top of umbrella
       noStroke();
       
       fill(#F5F4ED);  //fill color backgound
-      //noStroke();
-      //arc(x-55,y, 39, 15, PI, 2*PI);
-      //arc(x-20,y, 40, 15, PI, 2*PI);
-      //arc(x+20,y, 40, 15, PI, 2*PI);
-      //arc(x+55,y, 39, 15, PI, 2*PI);
       //small arc at background color for waving 
       arc(-55,0, 39, 15, PI, 2*PI);
       arc(-20,0, 40, 15, PI, 2*PI);
@@ -495,9 +485,9 @@ void draw()
    popMatrix();
    
    pushMatrix();
-      translate(x,y);
-      translate(800,90);
-      scale(.5);
+     // translate(x,y);  //make him move by translate x,y in the begining
+     // translate(800,90);
+      //scale(scale_factor);  //make him smaller
       //lower body
       quad(+140, +140, +80,+140, +50, +205, +115,+205);  
       quad(+115,+205,+50,+205, +50, +220, +105,+220);
@@ -530,9 +520,9 @@ void draw()
       fill(#551C00);
       quad(+125,+160, +116,+205, +140,+230,+150,+207); 
       quad(+149,+207,+139,+230, +170,+240,+180,+215);
+      
       //shoe  ->reuse the shoe above
       pushMatrix();
-          //translate(x,y);
           rotate(-PI/2.9);    //adjust rotation and translate to fit the back leg
           translate(-185,-4);
           rect(36,268, 44,15);//shoe
@@ -548,47 +538,65 @@ void draw()
       popMatrix();
    popMatrix();
    
+   popMatrix();
    //make it moving
+   //go forward until he reach the edge then come back
    if(moving_man)
    {
-        x-=random(-1,4);
-        y += random(-1,1);
-        if(x <= -280)
-            {
+     if(back)
+        {
+          x-=random(-5,1);  //make him move backward if back is true;
+          if(x > 10)
+              back = false;   //when he move back near the edge on the right
+                               // set back to false -> move forawrd again
+        }
+     else
+     {
+        x-=random(-1,5);    //back is false -> move forawrd
+        y += random(-1,1); // shaking
+        if(x <= -280)      // let the man move to the middle and make the 2 boxers
+            {              // move at that time
               moving_red = true;
               moving_blue = true;
             }
-        if(x<=-700)
-            x=0;
+        if(x<=-750)      // when the man move to the edge on the left 
+           back = true;   // set back to true to make him go backward
+     }
    }
    //blue
    if(moving_blue)
    {
-     if(bx < 200)
+     if(bx < 200)    //make the left boxer mover forward until he reach certain point
          bx += 5;  
-      else if(kx >=200 && kx < 300)
-          bx+= random(-10,10);
-      else bx = 200;
-     by += random(-1,1);
+      else if(bx >=200 && bx < 280)    // then make him go back and forward
+          bx+= random(-10,10);      
+      else bx = 200;    // when he exceed the range make him go back a little bit
+     by += random(-1,1); //make him shaking (jumping)
+     if(by >= 320)
+         by = 250;
    }
    
    //red
    if(moving_red)
    {
-       if(kx >= 200)
+       if(kx >= 200)    // make the right boxer move in until he reach certain point
            kx-=5;
-       else if(kx < 200 && kx > 100)
-           kx += random(-10,10);
-       else kx = 200;
-       ky += random(-1,1);
+       else if(kx < 200 && kx > 120)    //if he is inside the range make he move
+           {
+             kx += random(-10,10);      // back and forward
+             on_scale = true;
+           }
+       else kx = 200;       // if he out of range make he go back a little bit
+       ky += random(-1,1);      //make him shaking
+       if(ky >= 300)
+           ky = 250;
    }
    //Raindrops
    
        //raindrops
-        strokeWeight(2);  //create thickness for the raindrop
-       // stroke(#3EBFAE);  //fill the color for the raindrop
-       stroke(#2E7CE5);
-       // fill(#3EBFAE);
+        strokeWeight(1);  //create thickness for the raindrop
+        stroke(#2E7CE5);
+       
        for(int i=0; i<120; i++)
        {
          //rain_c = color(random(255),random(255), random(225));
@@ -596,10 +604,7 @@ void draw()
          cy = random(height-60);
          line(cx, cy, cx+30, cy+60);  //draw the line - raindrop
        }
-       
-       //cx+=30;
-       //cy+=30;
-      // y = height;
+
        for(int i=0; i<15; i++)
        {
          cx = random(width);
@@ -609,11 +614,10 @@ void draw()
        }
        noStroke();
        
-       //background(#F5F4ED);
 save("Lab2_output.jpg");
 }
 
 void mousePressed()
 {
-     moving_man = true;
+     moving_man = true;  // click to make the man move
 }
