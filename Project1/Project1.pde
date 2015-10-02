@@ -4,9 +4,8 @@
   Project 1
 */
 float r,g,b;
-float x,y,cx,cy, scale_factor;
+float x,y,cx,cy, scale_factor,bx,by, kx,ky;
 color rain_c;
-float bx,by, kx,ky;
 boolean moving_man, moving_red, moving_blue, back, on_scale;
 
 void setup()
