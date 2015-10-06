@@ -1,12 +1,19 @@
+import ddf.minim.*;
+
+AudioPlayer player;
+Minim minim;//audio context
+
 float x,y;
 float center_x,center_y;
 float x1,x2,x3,y1,y2,y3;
 float diam, rad;
-boolean Star_on, back_on, boom;
+boolean Star_on, back_on, boom_top, play_music, pause_music, playing;
 int count_stars;
 color c1,c2, temp;
 void setup()
 {
+    minim = new Minim(this);
+    player = minim.loadFile("DayForNight.mp3", 2048);
     size(700,500);
     diam = 5;
     rad = diam/2;
@@ -16,19 +23,22 @@ void setup()
     count_stars = 0;
     c1 = color(0);    //black
     c2 = color(210);  //grey
-    boom = false;
+    boom_top = false;
+    play_music = false;
+    pause_music = false;
+    playing = false;
 }
 
 void draw()
 {
     //background(0);
     //2 rects
-    if(boom)
+    if(boom_top)
     {
         temp = c1;
         c1 = c2;
         c2 = temp;
-        boom = false;
+        boom_top = false;
         back_on = true;
         count_stars = 0;
     }
@@ -44,12 +54,26 @@ void draw()
       //right person
       RightPerson();
     }
+    
      fill(#935555);
      rect(650,0,50,30);
-    
-    //set the center of the stars
-    
-    
+     rect(650,470,50,30);
+     fill(#8DE3ED);
+     triangle(655,475, 675,485, 655, 495);
+     rect(682,475,4,20);
+     rect(690,475,4,20);
+    //music on
+    if(play_music)
+    {
+        player.play();
+        playing = true;
+        play_music = false;
+    }
+    if(pause_music)
+    {
+        player.pause();
+        pause_music = false;
+    }
     //draw Stars
     if(Star_on)
     {
@@ -212,5 +236,13 @@ void mousePressed()
         Star_on = true;
 
     if(mouseX >= 650 && mouseY <= 30)
-       boom = true;
+       boom_top = true;
+       
+    if(mouseX >= 650 && mouseX < 675 && mouseY >= 470)
+       play_music = true;
+    if(playing)
+    {
+       if(mouseX >= 675 && mouseY >= 470)
+           pause_music = true;
+    }
 }
