@@ -18,13 +18,15 @@ float diam, rad;
 boolean Star_on, back_on, boom_top, play_music, pause_music, playing;
 int count_stars;
 color c1,c2, temp;
+
 void setup()
 {
     minim = new Minim(this);
     player = minim.loadFile("DayForNight.mp3", 2048);
     size(700,500);
-    diam = 5;
+    diam = 8;
     rad = diam/2;
+    frameRate(200);
     //noLoop();
     Star_on = false;
     back_on = true;
@@ -35,6 +37,7 @@ void setup()
     play_music = false;
     pause_music = false;
     playing = false;
+
 }
 
 void draw()
@@ -47,6 +50,8 @@ void draw()
      
      //draw Stars
      drawStar();
+     
+     write_text();
      
 }
 
@@ -61,6 +66,7 @@ void change_background()
         boom_top = false;
         back_on = true;
         count_stars = 0;
+ 
     }
     if(back_on)
     {
@@ -188,20 +194,21 @@ void RightPerson()
 
 void drawStar()
 {
-    //draw star until reach 1500 times
+    //draw star until reach 1000 times
     if(Star_on)
     {
         back_on = false;
         {
-          if(count_stars > 1500)
+          if(count_stars > 1000)
               Star_on = false;
-          pushMatrix();
-            scale(random(.1,2));
+          pushMatrix();  
             center_x = random(width);
-            center_y = random(height);
+            center_y = random(100,height);
+            scale(random(.1,1));
             subStar();
           popMatrix();
           count_stars++;
+         
         }
     }
 }
@@ -223,6 +230,7 @@ void subStar()
       y3=center_y + rad * sin(t*PI+2*PI/5);
       triangle(x1,y1,x2,y2,x3,y3);
       t=t+PI/8;
+    
   }
 }
 
@@ -253,6 +261,16 @@ void musicPlayer()
         player.rewind();
 }
 
+void write_text()
+{  
+    fill(210);
+    textSize(15);
+    text("Somewhere in this vast universe,", 25, 30); 
+    text("there grows a boy.", 180,55);
+    fill(0);
+    text("And somewhere in this boy,", 385,30);
+    text("there grows a vast universe.", 450, 55);
+}
 void mousePressed()
 {  
     float mouse1 = pow((mouseX - 175),2) + pow((mouseY - 150),2) - pow(55,2);
