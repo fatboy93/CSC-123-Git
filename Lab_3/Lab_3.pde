@@ -15,7 +15,7 @@ float x,y;
 float center_x,center_y;
 float x1,x2,x3,y1,y2,y3;
 float diam, rad;
-boolean Star_on, back_on, boom_top, play_music, pause_music, playing;
+boolean Star_on, back_on, boom_top, play_music, pause_music, playing, text_on;
 int count_stars;
 color c1,c2, temp;
 
@@ -24,7 +24,7 @@ void setup()
     minim = new Minim(this);
     player = minim.loadFile("DayForNight.mp3", 2048);
     size(700,500);
-    diam = 8;
+    diam = 4;
     rad = diam/2;
     frameRate(200);
     //noLoop();
@@ -37,6 +37,7 @@ void setup()
     play_music = false;
     pause_music = false;
     playing = false;
+    text_on = false;
 
 }
 
@@ -50,8 +51,10 @@ void draw()
      
      //draw Stars
      drawStar();
-     
-     write_text();
+    
+    //write text
+     if(text_on)
+         write_text();
      
 }
 
@@ -204,10 +207,12 @@ void drawStar()
           pushMatrix();  
             center_x = random(width);
             center_y = random(100,height);
-            scale(random(.1,1));
+            scale(random(.1,2));
             subStar();
           popMatrix();
           count_stars++;
+          if(count_stars > 500)
+              text_on = true;
          
         }
     }
