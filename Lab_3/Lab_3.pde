@@ -1,77 +1,135 @@
 float x,y;
-
+float center_x,center_y;
+float x1,x2,x3,y1,y2,y3;
+float diam, rad;
+boolean Star_on, back_on, boom;
+int count_stars;
+color c1,c2, temp;
 void setup()
 {
     size(700,500);
-    
+    diam = 5;
+    rad = diam/2;
+    //noLoop();
+    Star_on = false;
+    back_on = true;
+    count_stars = 0;
+    c1 = color(0);    //black
+    c2 = color(210);  //grey
+    boom = false;
 }
 
 void draw()
 {
+    //background(0);
     //2 rects
-    fill(0);
-    rect(0,0,350,500);
-    fill(210);
-    rect(350,0,350,500);
+    if(boom)
+    {
+        temp = c1;
+        c1 = c2;
+        c2 = temp;
+        boom = false;
+        back_on = true;
+        count_stars = 0;
+    }
+    if(back_on)
+    {
+      fill(c1);
+      rect(0,0,350,500);
+      fill(c2);
+      rect(350,0,350,500);
+      //left person
+      LeftPerson();
     
-    //left person
+      //right person
+      RightPerson();
+    }
+     fill(#935555);
+     rect(650,0,50,30);
     
+    //set the center of the stars
+    
+    
+    //draw Stars
+    if(Star_on)
+    {
+        back_on = false;
+       // for(int i=0; i<800; i++)
+        {
+          if(count_stars > 1000)
+              Star_on = false;
+          pushMatrix();
+            scale(random(.1,2));
+            center_x = random(width);
+            center_y = random(height);
+            drawStar(center_x, center_y, diam, rad);
+          popMatrix();
+          count_stars++;
+        }
+    }
+}
+
+void LeftPerson()
+{
     //head
     noStroke();
     ellipse(175,150,110,110);
    
     //body
-    fill(210);
+    fill(c2);
     rect(138,195,75,210);
    
     //eyes
-    fill(0);
+    fill(c1);
     ellipse(150,150,25,7);
     ellipse(200,150,25,7);
     //between legs
     ellipse(175,420,35,210);
     //feet
-    fill(210);
+    fill(c2);
     ellipse(132,399.2,40,12);
     ellipse(220,399.2,40,12);
     //arms
     arc(210,315,106,240,-PI/2, 0);
     arc(141,315,105,240,PI, 3*PI/2);
-    fill(0);
+    fill(c1);
     arc(213,318,54,200,-PI/2,0);
     arc(138,315,52,200,PI, 3*PI/2);
-    //left
+    
+    //left fingers
     ellipse(108,312,1.5,28);
     ellipse(103,312,1.5,28);
     ellipse(98,312,1.5,26);
     ellipse(93,312,1.5,24);
     rect(108,308,4,8);
     
-    fill(210);
-    arc(90,315,2.7,3,0,PI);
-    arc(95.5,315,2.7,3,0,PI);
-    arc(100.5,315,2.7,3,0,PI);
-    arc(105.5,315,2.7,3,0,PI);
+    fill(c2);
+    
+    for(int i=0; i<20; i+=5)
+        arc(90.5+i,315,2.7,3,0,PI);
+    //thumb
     arc(110.5,308,2.7,3,0,PI);
-    //right
-   fill(0);
+    
+    //right fngers
+    fill(c1);
     ellipse(244,312,1.5,28);
     ellipse(249,312,1.5,28);
     ellipse(254,312,1.5,26);
     ellipse(259,312,1.5,24);
     rect(240,308,4,8);
-    fill(210);
+    fill(c2);
+    for(int j=0; j<20; j+=5)
+        arc(246.5+j,315,2.7,3,0,PI);
+    //thumb
     arc(241.5,308,2.7,3,0,PI);
-    arc(246.5,315,2.7,3,0,PI);
-    arc(251.5,315,2.7,3,0,PI);
-    arc(256.5,315,2.7,3,0,PI);
-    arc(261.5,315,2.7,3,0,PI);
-  
-    //right person
-    pushMatrix();
-    translate(375,0);
+}
+
+void RightPerson()
+{
+ pushMatrix();
+    translate(350,0);
      //head
-     fill(0);
+     fill(c1);
       noStroke();
       ellipse(175,150,110,110);
      
@@ -79,19 +137,19 @@ void draw()
       rect(138,195,75,210);
      
       //eyes
-      fill(210);
+      fill(c2);
       ellipse(150,150,25,7);
       ellipse(200,150,25,7);
       //between legs
       ellipse(175,420,35,210);
       //feet
-      fill(0);
+      fill(c1);
       ellipse(132,399.2,40,12);
       ellipse(220,399.2,40,12);
       //arms
       arc(210,315,106,240,-PI/2, 0);
       arc(141,315,105,240,PI, 3*PI/2);
-      fill(210);
+      fill(c2);
       arc(213,318,54,200,-PI/2,0);
       arc(138,315,52,200,PI, 3*PI/2);
       //left
@@ -101,29 +159,58 @@ void draw()
       ellipse(93,312,1.5,24);
       rect(108,308,4,8);
       
-      fill(0);
-      arc(90,315,2.7,3,0,PI);
-      arc(95.5,315,2.7,3,0,PI);
-      arc(100.5,315,2.7,3,0,PI);
-      arc(105.5,315,2.7,3,0,PI);
+      fill(c1);
+      for(int i=0; i<20; i+=5)
+        arc(90.5+i,315,2.7,3,0,PI);
+      //thumb
       arc(110.5,308,2.7,3,0,PI);
+      
       //right
-     fill(210);
+      fill(c2);
       ellipse(244,312,1.5,28);
       ellipse(249,312,1.5,28);
       ellipse(254,312,1.5,26);
       ellipse(259,312,1.5,24);
       rect(240,308,4,8);
-      fill(0);
+      fill(c1);
       arc(241.5,308,2.7,3,0,PI);
-      arc(246.5,315,2.7,3,0,PI);
-      arc(251.5,315,2.7,3,0,PI);
-      arc(256.5,315,2.7,3,0,PI);
-      arc(261.5,315,2.7,3,0,PI);
+      for(int j=0; j<20; j+=5)
+        arc(246.5+j,315,2.7,3,0,PI);
+      //thumb
+      arc(241.5,308,2.7,3,0,PI);
    popMatrix();
-   
-   //stars
-   
-   
-  
+}
+
+void drawStar(float center_x, float center_y, float diam, float rad)
+{
+  noStroke();
+  //fill( random(255), random(255), random(255));
+  fill(210);
+  ellipse(center_x,center_y,diam,diam);
+  float t=0;
+
+  for(int i=0; i<5;i++)
+  {
+      x1=center_x + rad * cos(t*PI);
+      y1=center_y + rad * sin(t*PI);
+      x2=center_x + diam * cos(t*PI+PI/5);
+      y2=center_y + diam * sin(t*PI+PI/5);
+      x3=center_x + rad * cos(t*PI+2*PI/5);
+      y3=center_y + rad * sin(t*PI+2*PI/5);
+      triangle(x1,y1,x2,y2,x3,y3);
+      t=t+PI/8;
+  }
+}
+
+void mousePressed()
+{  
+    float mouse1 = pow((mouseX - 175),2) + pow((mouseY - 150),2) - pow(55,2);
+    float mouse2 = pow((mouseX - 350 - 175),2) + pow((mouseY - 150),2) 
+                   - pow(55,2);
+    //if user click inside the 2 faces -> stars will appear
+    if(mouse1 <= 0 || mouse2 <= 0)
+        Star_on = true;
+
+    if(mouseX >= 650 && mouseY <= 30)
+       boom = true;
 }
