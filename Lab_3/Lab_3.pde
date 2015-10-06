@@ -1,3 +1,11 @@
+/*
+  Nghia Nguyen
+  CPE 123 - Lab 3
+*/
+//Secret with the two faces - click
+//Secret at top right - click
+//play music bottom right - click
+
 import ddf.minim.*;
 
 AudioPlayer player;
@@ -44,6 +52,7 @@ void draw()
 
 void change_background()
 {
+  //interchange the color - switch
   if(boom_top)
     {
         temp = c1;
@@ -179,10 +188,10 @@ void RightPerson()
 
 void drawStar()
 {
+    //draw star until reach 1500 times
     if(Star_on)
     {
         back_on = false;
-       // for(int i=0; i<800; i++)
         {
           if(count_stars > 1500)
               Star_on = false;
@@ -200,7 +209,6 @@ void drawStar()
 void subStar()
 {
   noStroke();
-  //fill( random(255), random(255), random(255));
   fill(210);
   ellipse(center_x,center_y,diam,diam);
   float t=0;
@@ -229,20 +237,20 @@ void musicPlayer()
      rect(682,475,4,20);
      rect(690,475,4,20);
      
-  //music on
+    //music on
     if(play_music)
     {
         player.play();
         playing = true;
         play_music = false;
-        if(player.position() == player.length())
-            player.rewind();
     }
     if(pause_music)
     {
         player.pause();
         pause_music = false;
     }
+    if(player.position() == player.length())
+        player.rewind();
 }
 
 void mousePressed()
