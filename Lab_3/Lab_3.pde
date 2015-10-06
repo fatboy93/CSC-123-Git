@@ -53,8 +53,9 @@ void draw()
      drawStar();
     
     //write text
-     if(text_on)
+    if(count_stars > 500)
          write_text();
+    
      
 }
 
@@ -210,10 +211,7 @@ void drawStar()
             scale(random(.1,2));
             subStar();
           popMatrix();
-          count_stars++;
-          if(count_stars > 500)
-              text_on = true;
-         
+          count_stars++;     
         }
     }
 }
