@@ -31,9 +31,20 @@ void setup()
 
 void draw()
 {
-    //background(0);
-    //2 rects
-    if(boom_top)
+     //draw
+     change_background();
+    
+     //play music
+     musicPlayer();
+     
+     //draw Stars
+     drawStar();
+     
+}
+
+void change_background()
+{
+  if(boom_top)
     {
         temp = c1;
         c1 = c2;
@@ -50,49 +61,10 @@ void draw()
       rect(350,0,350,500);
       //left person
       LeftPerson();
-    
       //right person
       RightPerson();
     }
-    
-     fill(#935555);
-     rect(650,0,50,30);
-     rect(650,470,50,30);
-     fill(#8DE3ED);
-     triangle(655,475, 675,485, 655, 495);
-     rect(682,475,4,20);
-     rect(690,475,4,20);
-    //music on
-    if(play_music)
-    {
-        player.play();
-        playing = true;
-        play_music = false;
-    }
-    if(pause_music)
-    {
-        player.pause();
-        pause_music = false;
-    }
-    //draw Stars
-    if(Star_on)
-    {
-        back_on = false;
-       // for(int i=0; i<800; i++)
-        {
-          if(count_stars > 1000)
-              Star_on = false;
-          pushMatrix();
-            scale(random(.1,2));
-            center_x = random(width);
-            center_y = random(height);
-            drawStar(center_x, center_y, diam, rad);
-          popMatrix();
-          count_stars++;
-        }
-    }
 }
-
 void LeftPerson()
 {
     //head
@@ -205,7 +177,27 @@ void RightPerson()
    popMatrix();
 }
 
-void drawStar(float center_x, float center_y, float diam, float rad)
+void drawStar()
+{
+    if(Star_on)
+    {
+        back_on = false;
+       // for(int i=0; i<800; i++)
+        {
+          if(count_stars > 1500)
+              Star_on = false;
+          pushMatrix();
+            scale(random(.1,2));
+            center_x = random(width);
+            center_y = random(height);
+            subStar();
+          popMatrix();
+          count_stars++;
+        }
+    }
+}
+
+void subStar()
 {
   noStroke();
   //fill( random(255), random(255), random(255));
@@ -224,6 +216,33 @@ void drawStar(float center_x, float center_y, float diam, float rad)
       triangle(x1,y1,x2,y2,x3,y3);
       t=t+PI/8;
   }
+}
+
+void musicPlayer()
+{
+     //controller
+     fill(#935555);
+     rect(650,0,50,30);
+     rect(650,470,50,30);
+     fill(#8DE3ED);
+     triangle(655,475, 675,485, 655, 495);
+     rect(682,475,4,20);
+     rect(690,475,4,20);
+     
+  //music on
+    if(play_music)
+    {
+        player.play();
+        playing = true;
+        play_music = false;
+        if(player.position() == player.length())
+            player.rewind();
+    }
+    if(pause_music)
+    {
+        player.pause();
+        pause_music = false;
+    }
 }
 
 void mousePressed()
