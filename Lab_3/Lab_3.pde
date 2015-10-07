@@ -16,7 +16,7 @@ float center_x,center_y;
 float x1,x2,x3,y1,y2,y3;
 float diam, rad;
 boolean Star_on, back_on, boom_top, play_music, pause_music, playing, text_on;
-boolean draw_right;
+boolean horn;
 int count_stars;
 color c1,c2, temp;
 
@@ -39,7 +39,7 @@ void setup()
     pause_music = false;
     playing = false;
     text_on = false;
-    draw_right = true;
+    horn = false;
     center_x = 0;
     center_y = 0;
 }
@@ -92,6 +92,8 @@ void LeftPerson(color c1, color c2)  //passing the color you want to fill
     //head
     fill(c2);
     noStroke();
+   
+    fill(c2);
     ellipse(175,150,110,110);
    
     //body
@@ -151,6 +153,15 @@ void RightPerson()
     popMatrix();
 }
 
+void draw_horn(color in_c1, color in_c2)
+{
+    fill(in_c2);
+    arc(150,100,50,70,PI/2,PI+PI/6);
+    arc(200,100,50,70,-PI/6, PI/2);
+    fill(in_c1);
+    ellipse(175,250,50,50);
+}
+
 void drawStar()
 {
     //draw star until reach 1000 times
@@ -160,8 +171,18 @@ void drawStar()
         {
           if(count_stars > 1000)
               Star_on = false;  //if 1000 stars - stop drawing
+           
+          if(count_stars == 500)
+          {
+              draw_horn(c1,c2); //left person
+              pushMatrix();     //right person
+                  translate(350,0);
+                  draw_horn(c2,c1);  
+              popMatrix();
+          }
+          
           pushMatrix();  //save the origin
-            translate(random(width), random(height));  //put the star anywhere
+            translate(random(width), random(70,height));  //put the star anywhere
             scale(random(.1,2));  //control the size of star
             subStar();  //calling the substar function to draw
           popMatrix();  //restore the origin
