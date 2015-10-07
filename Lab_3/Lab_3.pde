@@ -252,6 +252,7 @@ void write_text()
     fill(0);
     text("And somewhere in this boy,", 385,30);
     text("there grows a vast universe.", 450, 55);
+    text_on = false;
 }
 void mousePressed()
 {  
