@@ -41,8 +41,8 @@ void setup()
   on_scale = false;
 
   //try out music
-  file = new SoundFile(this, "sample.mp3");
-  file.play();
+ // file = new SoundFile(this, "sample.mp3");
+ // file.play();
 }
 
 void draw()
@@ -154,6 +154,8 @@ void draw()
   //two black rect
   bottomRect();
   topRect();
+  
+  save("Project1.jpg");
 }
 
 void mousePressed()
