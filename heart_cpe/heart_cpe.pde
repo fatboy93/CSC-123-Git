@@ -3,10 +3,11 @@ float temp_x1, temp_y1;
 
 void setup()
 {
-    size(400,400);
-    background(200);
+    size(600,600);
+    background(0);
     t1=0;
     //noLoop();
+    frameRate(10);
     temp = 0;
 }
 
@@ -35,7 +36,7 @@ void draw()
          x1 = 16*pow(sin(t1),3);
          y1 = -( 13*cos(t1) - 5*cos(2*t1) - 2*cos(3*t1) - cos(4*t1));
          line(0,-6.5,x1,y1);
-         t1 +=.02; 
+         t1 +=.1; 
       }
       t1 = temp;
       x1 = temp_x1;
