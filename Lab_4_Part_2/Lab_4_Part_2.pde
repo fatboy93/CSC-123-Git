@@ -1,9 +1,11 @@
 float x,y;
+PFont textF;
 void setup()
 {
   size(650,650);
   background(#5CB78A);
   x=0; y=0;
+  textF = loadFont("DFKaiShu-SB-Estd-BF-48.vlw");
   noLoop();
 }
 
@@ -75,20 +77,38 @@ void draw_Shark(float Cx, float Cy, float ratio, float rot)
      quad(489,163, 507,165, 502,174, 486,173);
      triangle(502,174, 486,173, 491,179);
   popMatrix();
-   
+}
+void writeText()
+{
+//text
+ fill(#0B503C);
+ textFont(textF);
+ textSize(18);
+ textAlign(CENTER);
+ text("MAY BE THE OCEAN", width/2, height/2-40);
+ text("GETS ITS SALTINESS", width/2, height/2-20);
+ text("FROM THE TEARS", width/2, height/2);
+ text("OF MISUNDERSTOOD", width/2, height/2+20);
+ text("SHARKS", width/2, height/2+40);
+ 
 }
 void draw()
 {
   //top left 
   for(int i=0; i<10; i++)
-    draw_Shark(random(20,width/2-20), random(20, height/2-20), random(0.05, 0.2), random(-45,70));
+    draw_Shark(random(20,width/3), random(20, 2*height/3), random(0.05, 0.2), random(-45,100));
  //top right
  for(int i=0; i<10; i++)
-    draw_Shark(random(width/2 +20, width-20), random(20, height/2-20), random(0.05, 0.2), random(-45,70));
+    draw_Shark(random(width/3, width-20), random(20, height/3), random(0.05, 0.2), random(-120,120));
  //bottom left
  for(int i=0; i<10; i++)
-    draw_Shark(random(20, width/2-20), random(height/2+20, height-20), random(0.05, 0.2), random(-45,70));
+    draw_Shark(random(20, 2*width/3), random(2*height/3, height-20), random(0.05, 0.2), random(-90,70));
  //bottom right
  for(int i=0; i<10; i++)
-    draw_Shark(random(width/2+20, width-20), random(height/2+20, height-20), random(0.05, 0.2), random(-45,70));
+    draw_Shark(random(2*width/3, width-20), random(height/3, height-20), random(0.05, 0.2), random(-135,90));
+    
+ //dislay text
+ writeText();
+ 
+ save("Lab4_Part2.jpeg");
 }
