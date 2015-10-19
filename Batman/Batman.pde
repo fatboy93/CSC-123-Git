@@ -13,9 +13,11 @@ void draw()
     t=0;
     background(255);
     pushMatrix();
-        translate(x1,y1);
+    translate(300,300);
+       // translate(x1,y1);
+       //translate(random(width), random(height));
         stroke(random(255), random(255), random(255));
-        scale(.2);
+       // scale(random(.1,.4));
         //ellipse(0,0,300,100);
         strokeWeight(7);
         //stroke(255,0,0);
