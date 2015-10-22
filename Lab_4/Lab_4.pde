@@ -47,5 +47,5 @@ void draw()
       y = y+45;
       count++;
   }
-  save("Lab4.jpeg");
+ // save("Lab4.jpeg");
 }
