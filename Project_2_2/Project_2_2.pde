@@ -234,6 +234,8 @@ void mid_tree()
     noStroke();
     fill(#3AE560);
     quad(-15, 25, 25,25, 10, -15, 0 , -15);
+     ellipse(8,20, 45,28);
+    
       if(count_t_m>=20 && count_s_m<385)
       {
           count_s_m++;
@@ -254,8 +256,10 @@ void mid_tree()
             draw_sin_1(0,-370, count_b_m++, 50,10,PI/2+PI/3);
             if(count_b_m<180)
             {
-              draw_half_circle(-85, -390, count_b_m, 125, 9, PI/8);//good
+              //top branch
               draw_half_circle(-85, -410, count_b_m, 140, 10, PI/5);  // good
+              //middle branch
+              draw_half_circle(-85, -390, count_b_m, 125, 9, PI/8);//good
               //bottom branch
               draw_half_circle(-80, -350, count_b_m, 125, 10, 0); //good
             }
@@ -263,6 +267,7 @@ void mid_tree()
          }
         else
         {
+          //right branch
             pushMatrix();
              translate(120,-.75*height);
              rotate(PI/2.7);
@@ -271,6 +276,31 @@ void mid_tree()
              fill(#1EAF3E);
              ellipse(0,0, 15,80);
              popMatrix(); 
+         //left branches
+           pushMatrix();
+            translate(-120,-.75*height);
+            quad(27,-36, 23,-43, -10, -45, 0,-10);
+            quad(-22,30, -28, 22,-55, 20, -40, 55);
+            quad(-22, 58, -28, 53, -55, 70, -30, 90);
+            fill(#DAE03D);
+            //bottom light
+            pushMatrix();
+              rotate(-PI/3);
+              ellipse(-90,4,10, 25);  
+            popMatrix();
+            //mid light
+            pushMatrix();
+              rotate(-PI/6);
+              ellipse(-60, 10, 10, 30);
+            popMatrix();
+            //top light
+            pushMatrix();
+              rotate(-PI/9.5);
+              ellipse(5, -28, 10, 30);
+            popMatrix();
+            
+           popMatrix();
+           
         }
         
        }
@@ -298,6 +328,7 @@ void draw()
   // for(int i=0; i<20; i++)
     
   // endShape();
+ // save("Project_2.jpeg");
 }
 
 void mousePressed()
