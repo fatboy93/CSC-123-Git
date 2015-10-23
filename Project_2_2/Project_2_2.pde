@@ -106,7 +106,7 @@ void tree(float start_x, float start_y,float end, float y_t, float width_tree)
 void right_tree()
 {
     pushMatrix();
-  translate(.8*width, .9*height);
+  translate(.76*width, .9*height);
   if(!right)
   {
     fill(#53552A);
@@ -116,30 +116,32 @@ void right_tree()
   else
   {
     noStroke();
+    fill(#5E5F47);
+    ellipse(4,20, 50,28);
     fill(#3AE560);
     quad(-15, 25, 25,25, 10, -15, 0 , -15);
-    ellipse(4,20, 45,28);
-      if(count_t_r>=20 && count_s_r<260)
+    
+      if(count_t_r>=20 && count_s_r<310)
       {
           count_s_r++;
-          draw_sin_1(+5,0, count_s_r, 12,3, PI/2);
-          draw_sin_2(+6,0, count_s_r, 12,3, PI/2);
+          draw_sin_1(+5,0, count_s_r, 12,4, PI/2);
+          draw_sin_2(+6,0, count_s_r, 12,4, PI/2);
       }
-      if(count_t_r < 245)
+      if(count_t_r < 285)
       {
           count_t_r++;
           tree(0,0,count_t_r, -count_t_r, 10);
           //quad(0,0, 30,0, 30,count ,0, count);
       }
-      if(count_s_r>=260)
+      if(count_s_r>=285)
        {
          stroke(#1EAF3E);
          fill(#DAE03D, 90);
          strokeWeight(4);
-         ellipse(6, -275, 25,50);
+         ellipse(6, -315, 25,50);
          fill(#1EAF3E);
          strokeWeight(1);
-         triangle(-2, -303, 14, -303, 6, -320);
+         triangle(-2, -340, 14, -340, 6, -360);
        }
   }
   popMatrix();
@@ -158,14 +160,16 @@ void left_tree()
   else
   {
     noStroke();
+    fill(#5E5F47);
+    ellipse(8,20, 80,40);
     fill(#3AE560);
     quad(-15, 25, 30,25, 20, -15, -3 , -15);
-    ellipse(8,20, 45,28);
+    
       if(count_t_l>=20 && count_s_l<460)
       {
           count_s_l++;
-          draw_sin_1(+6,0, count_s_l, 13,6, PI/2);
-          draw_sin_2(+9,0, count_s_l, 13,6,PI/2);
+          draw_sin_1(+6,0, count_s_l, 13,3, PI/2);
+          draw_sin_2(+9,0, count_s_l, 13,3,PI/2);
       }
       if(count_t_l < 340)
       {
@@ -182,7 +186,7 @@ void left_tree()
          ellipse(6, -380, 32,80);
          strokeWeight(1);
          fill(#1EAF3E);
-         triangle(-2, -423, 14, -423, 6, -460);
+         triangle(-2, -420, 14, -420, 6, -460);
          //left branche
          if(count_b_l<220)
              draw_sin_2(-2,-320,count_b_l++,50,10, PI/3.5);
@@ -191,6 +195,7 @@ void left_tree()
          {
            //left branch
              pushMatrix();
+             //noStroke();
              translate(-95,-.75*height);
              rotate(-PI/3.5);
              fill(#DAE03D, 90);
@@ -201,10 +206,11 @@ void left_tree()
          }
          //right branch
          if(count_b_r <160)
-             draw_sin_1(0,-320,count_b_r++,50,10, PI/2+PI/3);
+             draw_sin_1(5,-330,count_b_r++,50,10, PI/2+PI/3);
          else
          {
              pushMatrix();
+             //noStroke();
              translate(85,-.65*height);
              rotate(PI/3.5);
              fill(#DAE03D, 90);
@@ -232,17 +238,19 @@ void mid_tree()
   else
   {
     noStroke();
+     fill(#5E5F47);
+     ellipse(7,20, 100,50);
     fill(#3AE560);
-    quad(-15, 25, 25,25, 10, -15, 0 , -15);
-     ellipse(8,20, 45,28);
+     quad(-15, 25, 30,25, 20, -15, -10 , -15);
+    
     
       if(count_t_m>=20 && count_s_m<385)
       {
           count_s_m++;
-          draw_sin_1(+5,0, count_s_m, 12,3,PI/2);
-          draw_sin_2(+6,0, count_s_m, 12,3,PI/2);
+          draw_sin_1(+5,0, count_s_m, 12,1,PI/2);
+          draw_sin_2(+6,0, count_s_m, 12,1,PI/2);
       }
-      if(count_t_m < 360)
+      if(count_t_m < 370)
       {
           count_t_m++;
           tree(0,0,count_t_m, -count_t_m, 10);
@@ -333,7 +341,7 @@ void draw()
 
 void mousePressed()
 {
-  if((pow(.8*width+6-mouseX,2)+pow(.9*height+20-mouseY,2)) <= 15*15)
+  if((pow(.76*width+6-mouseX,2)+pow(.9*height+20-mouseY,2)) <= 15*15)
     right = true;
   if((pow(.15*width+6-mouseX,2)+pow(.9*height+20-mouseY,2)) <= 15*15)
     left = true;
