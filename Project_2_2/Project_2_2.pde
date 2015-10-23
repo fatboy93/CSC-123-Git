@@ -93,13 +93,14 @@ void right_tree()
     noStroke();
     fill(#3AE560);
     quad(-15, 25, 25,25, 10, -15, 0 , -15);
+    ellipse(4,20, 45,28);
       if(count_t_r>=20 && count_s_r<260)
       {
           count_s_r++;
-          draw_sin_1(+5,0, count_s_r, 12,2, PI/2);
-          draw_sin_2(+6,0, count_s_r, 12,2, PI/2);
+          draw_sin_1(+5,0, count_s_r, 12,3, PI/2);
+          draw_sin_2(+6,0, count_s_r, 12,3, PI/2);
       }
-      if(count_t_r < 240)
+      if(count_t_r < 245)
       {
           count_t_r++;
           tree(0,0,count_t_r, -count_t_r, 10);
@@ -134,6 +135,7 @@ void left_tree()
     noStroke();
     fill(#3AE560);
     quad(-15, 25, 30,25, 20, -15, -3 , -15);
+    ellipse(8,20, 45,28);
       if(count_t_l>=20 && count_s_l<460)
       {
           count_s_l++;
