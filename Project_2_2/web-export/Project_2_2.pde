@@ -1,9 +1,9 @@
 float t, x, y, rad, count_t_r, count_s_r, count_t_l, count_s_l, count_b_l, count_b_r;
-float count_t_m, count_s_m, count_b_m;
+float count_t_m, count_s_m;
 boolean right, left, mid;
 void setup()
 {
-  size(1000,650);
+  size(800,650);
   background(#549AED,200);
   rad = 15;
   count_t_r = 0;
@@ -12,36 +12,11 @@ void setup()
   count_s_l = 0;
   count_t_m = 0;
   count_s_m = 0;
-  count_b_m = 0;
   y=0;
   frameRate(300);
   right = false;
   left = false;
   mid = false;
-}
-
-void draw_half_circle(float start_x, float start_y,float end, float rad_cir, float inc,
-                float rot)
-{
-   t=0;
-   float x,y;
-  //sin
-  noFill();
-  stroke(#1EAF3E);
-  strokeWeight(3);
-  pushMatrix();
-  translate(start_x, start_y);
-  rotate(rot);
-  beginShape();
-   for(int i=0; i<end; i+=inc)
-  {
-     x = .7*rad_cir*cos(t);
-     y = -rad_cir*sin(t);
-     curveVertex(x,y);
-     t = t+PI/20;
-  }
-  endShape();
-  popMatrix();
 }
 void draw_sin_1(float start_x, float start_y,float end, float rad_sin, float inc,
                 float rot)
@@ -148,7 +123,7 @@ void right_tree()
 void left_tree()
 {
    pushMatrix();
-  translate(.15*width, .9*height);
+  translate(.2*width, .9*height);
   if(!left)
   {
     fill(#53552A);
@@ -199,7 +174,6 @@ void left_tree()
              ellipse(10,10, 15,80);
              popMatrix(); 
          }
-         //right branch
          if(count_b_r <160)
              draw_sin_1(0,-320,count_b_r++,50,10, PI/2+PI/3);
          else
@@ -234,45 +208,27 @@ void mid_tree()
     noStroke();
     fill(#3AE560);
     quad(-15, 25, 25,25, 10, -15, 0 , -15);
-      if(count_t_m>=20 && count_s_m<385)
+      if(count_t_m>=20 && count_s_m<360)
       {
           count_s_m++;
           draw_sin_1(+5,0, count_s_m, 12,3,PI/2);
           draw_sin_2(+6,0, count_s_m, 12,3,PI/2);
       }
-      if(count_t_m < 360)
+      if(count_t_m < 340)
       {
           count_t_m++;
           tree(0,0,count_t_m, -count_t_m, 10);
          
       }
-      //mid branch
-      if(count_s_m>=360)
+      if(count_s_m>=260)
        {
-         if(count_b_m < 200)
-         {
-            draw_sin_1(0,-370, count_b_m++, 50,10,PI/2+PI/3);
-            if(count_b_m<180)
-            {
-              draw_half_circle(-85, -390, count_b_m, 125, 9, PI/8);//good
-              draw_half_circle(-85, -410, count_b_m, 140, 10, PI/5);  // good
-              //bottom branch
-              draw_half_circle(-80, -350, count_b_m, 125, 10, 0); //good
-            }
-            
-         }
-        else
-        {
-            pushMatrix();
-             translate(120,-.75*height);
-             rotate(PI/2.7);
-             fill(#DAE03D, 90);
-             ellipse(10,-5, 15,50);
-             fill(#1EAF3E);
-             ellipse(0,0, 15,80);
-             popMatrix(); 
-        }
-        
+         stroke(#1EAF3E);
+         strokeWeight(4);
+         fill(#DAE03D, 90);
+         ellipse(6, -275, 25,50);
+         strokeWeight(1);
+         fill(#3AE560);
+         triangle(-2, -303, 14, -303, 6, -320);
        }
   }
   popMatrix();
@@ -304,7 +260,7 @@ void mousePressed()
 {
   if((pow(.8*width+6-mouseX,2)+pow(.9*height+20-mouseY,2)) <= 15*15)
     right = true;
-  if((pow(.15*width+6-mouseX,2)+pow(.9*height+20-mouseY,2)) <= 15*15)
+  if((pow(.2*width+6-mouseX,2)+pow(.9*height+20-mouseY,2)) <= 15*15)
     left = true;
   if((pow(.5*width+6-mouseX,2)+pow(.9*height+20-mouseY,2)) <= 15*15)
     mid = true;
