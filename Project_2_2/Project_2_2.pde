@@ -5,7 +5,7 @@ float e = 2.7182818284590452353602874713527;
 void setup()
 {
   size(1000,650);
-  background(#549AED,200);
+  background(#549AED);
   rad = 15;
   count_t_r = 0;
   count_s_r = 0;
@@ -397,7 +397,7 @@ void draw()
   {
      write_text();
   }
- // save("Project_2.jpeg");
+  save("Project_2.jpeg");
 }
 void write_text()
 {
@@ -416,21 +416,21 @@ void mousePressed()
   {
     right = true;
     if(text_on)
-    background(#549AED,200);
+    background(#549AED);
     text_on = false;
   }
   if((pow(.15*width+6-mouseX,2)+pow(.9*height+20-mouseY,2)) <= 15*15)
   {
     left = true;
     if(text_on)
-    background(#549AED,200);
+    background(#549AED);
     text_on = false;
   }
   if((pow(.5*width+6-mouseX,2)+pow(.9*height+20-mouseY,2)) <= 15*15)
   {
     mid = true;
     if(text_on)
-    background(#549AED,200);
+    background(#549AED);
      text_on = false;
   }
 }
