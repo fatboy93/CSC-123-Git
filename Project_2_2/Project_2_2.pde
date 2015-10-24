@@ -1,6 +1,7 @@
 float t, x, y, rad, count_t_r, count_s_r, count_t_l, count_s_l, count_b_l, count_b_r;
-float count_t_m, count_s_m, count_b_m;
-boolean right, left, mid;
+float count_t_m, count_s_m, count_b_m, count_buf, count_star;
+boolean right, left, mid, buf, text_on;
+float e = 2.7182818284590452353602874713527;
 void setup()
 {
   size(1000,650);
@@ -14,10 +15,60 @@ void setup()
   count_s_m = 0;
   count_b_m = 0;
   y=0;
+  count_buf = 0;
+  buf = false;
   frameRate(300);
   right = false;
   left = false;
   mid = false;
+  count_star = 0;
+  text_on = true;
+}
+
+void drawStar(float center_x, float center_y,float rad_s, float scale_st)
+{
+  pushMatrix();
+  translate(center_x,center_y);
+  scale(scale_st);
+noStroke();
+  fill(#DAE03D);
+  ellipse(0,0,rad_s*2,rad_s*2);
+  float t=0;
+  float x1, x2, x3, y1,y2,y3;
+  for(int i=0; i<5;i++)
+  {
+      x1=rad_s * cos(t*PI);
+      y1=rad_s * sin(t*PI);
+      x2=rad_s*2 * cos(t*PI+PI/5);
+      y2=rad_s*2 * sin(t*PI+PI/5);
+      x3=rad_s * cos(t*PI+2*PI/5);
+      y3=rad_s * sin(t*PI+2*PI/5);
+      triangle(x1,y1,x2,y2,x3,y3);
+      t=t+PI/8;
+  }
+  popMatrix();
+}
+void butterfly(float start_x, float start_y, float size_b)
+{
+     pushMatrix();
+         translate(start_x, start_y);
+         rotate(random(-PI/3, PI/3));
+         scale(size_b);
+        float t1=0;
+        float x1,y1;
+        color  c = color(random(255), random(255), random(255));
+         fill(c);
+         stroke(c);
+         beginShape();
+         for(int j=0; j<43; j++)
+         {
+            x1 = 10*(sin(t1))*(pow(e,cos(t1)) - 2*cos(4*t1) - pow(sin(t1/12),5));
+            y1 = -10*(cos(t1))*(pow(e,cos(t1)) - 2*cos(4*t1) - pow(sin(t1/12),5));
+            t1+=PI/20;
+            curveVertex(x1,y1);
+         } 
+         endShape();
+       popMatrix();
 }
 
 void draw_half_circle(float start_x, float start_y,float end, float rad_cir, float inc,
@@ -306,7 +357,7 @@ void mid_tree()
               rotate(-PI/9.5);
               ellipse(5, -28, 10, 30);
             popMatrix();
-            
+            buf = true;
            popMatrix();
            
         }
@@ -317,34 +368,69 @@ void mid_tree()
 }
 void draw()
 {
+ 
   //right tree
   right_tree();
   left_tree();
   mid_tree();
+  if(buf && count_buf < 10)
+  {
+      butterfly(random(30,width/2),random(150,height-150), random(.1, .4));
+       butterfly(random(width/2, width-30),random(150,height-150), random(.1, .4));
+      count_buf++;
+  }
+  if(count_buf>=10 && count_star <= 20)
+  {
+      drawStar(random(10,width/2), random(5, 120), 3,random(.1,1));
+      drawStar(random(width/2, width-100), random(5, 120), 3,random(.1,1));
+      count_star ++;
+  }
   
-  
-  
-  //draw some trees
-  
-  
-   //if(count<100)
-   //{
-   //    count++;
-   //  circle(count);
-  // }
-  // beginShape();
-  // for(int i=0; i<20; i++)
-    
-  // endShape();
+  //draw sun
+  noStroke();
+  fill(#DAE03D);
+  ellipse(width-80,80, 100,100);
+  fill(#549AED);
+  ellipse(width-70, 70, 80,80);
+  drawStar(width-80,55,5,1);
+  if(text_on)
+  {
+     write_text();
+  }
  // save("Project_2.jpeg");
+}
+void write_text()
+{
+     fill(#EADC39);
+  textSize(20);
+  text("What are those dots??",200,100);
+  text("Click it and you will see!!", 500,200);
+  text("Save the best for last!!", 300, 500);
+  text("Click the middle dot last!?!", 320, 540);
+  
 }
 
 void mousePressed()
 {
   if((pow(.76*width+6-mouseX,2)+pow(.9*height+20-mouseY,2)) <= 15*15)
+  {
     right = true;
+    if(text_on)
+    background(#549AED,200);
+    text_on = false;
+  }
   if((pow(.15*width+6-mouseX,2)+pow(.9*height+20-mouseY,2)) <= 15*15)
+  {
     left = true;
+    if(text_on)
+    background(#549AED,200);
+    text_on = false;
+  }
   if((pow(.5*width+6-mouseX,2)+pow(.9*height+20-mouseY,2)) <= 15*15)
+  {
     mid = true;
+    if(text_on)
+    background(#549AED,200);
+     text_on = false;
+  }
 }
