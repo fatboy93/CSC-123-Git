@@ -397,7 +397,7 @@ void draw()
   {
      write_text();
   }
-  save("Project_2.jpeg");
+
 }
 void write_text()
 {
