@@ -2,28 +2,30 @@
   Nghia Nguyen
   CPE 123 - Lab 6
 */
-boolean moon;
+boolean  star;
+float end;
 void setup()
 {
     size(800,500);
-    moon = false;
-    noLoop();
+    star = false;
+    end = 0;
+   // noLoop();
 }
 
 void draw()
 {
-    background(0);
+  end++;
+    if(end > 4)
+        noLoop();
+    //background(0);
     for(int x=-10; x<=width; x+=2)
     {
         for(int y=0; y<=height; y+=2)
         {
-           // if(impl_circ(width/2, height/2, x,y, 100) > 0)
-            if(impl_circ(100,75, x,y, 50) < 0)
-           {     
-               //fill(#F6F7CF,128);
+            if(impl_circ(100,75, x,y, 45) < 0)
                 stroke(255,200);
-                moon  = true;
-           }
+
+        
           // else if(impl_eli(300, 500, 100,150, x,y) < 0)
              // stroke(#76384C,180);
            //kite
@@ -91,7 +93,29 @@ void draw()
                    && impl_line(592,304, 582,302,x,y)>0
                    && impl_line(582,302, 582, 375,x,y)>0)
                stroke(#393613,180);       
-               
+            
+              //stars
+           
+           else if(impl_circ(random(0,200), random(0,300),x,y,4) < 0)
+           {    
+               stroke(255,200);
+               star = true;
+           }
+            else if(impl_circ(random(200,400), random(0,300),x,y,4) < 0)
+           {    
+               stroke(255,200);
+               star = true;
+           }
+           else if(impl_circ(random(400,600), random(0,300),x,y,4) < 0)
+           {    
+               stroke(255,200);
+               star = true;
+           }
+           else if(impl_circ(random(600,800), random(0,200),x,y,4) < 0)
+           {    
+               stroke(255,200);
+               star = true;
+           }
                
            else if(impl_line(338,233,282,315,x,y) == 0)
                stroke(#67582F);
@@ -101,8 +125,12 @@ void draw()
             else
                 //fill(0,120,120,128);
                stroke(0,120,120,128);
-
-            
+            if(star)
+             {
+               ellipse(x,y,1,1);
+               star = false;
+             }
+            else
             line(x,y, x+random(2,5), y+random(2,5));
            // ellipse(x,y,5,5);
         }
