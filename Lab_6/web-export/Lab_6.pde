@@ -26,7 +26,7 @@ void draw()
         for(int y=0; y<=height; y+=2)
         {
             if(impl_circ(100,75, x,y, 45) < 0)
-                stroke(230+random(-10,20),200);
+                stroke(255,200);
 
         
           // else if(impl_eli(300, 500, 100,150, x,y) < 0)
@@ -79,8 +79,7 @@ void draw()
                
              //tree
             else if(impl_eli(675,265, 25,70,x,y) < 0)
-                stroke(30, 150+random(-20,20), 25, 180);
-                //stroke(#28711A,180);
+                stroke(#28711A,180);
             else if(impl_line(670,378, 680,380, x,y)>0 
                    && impl_line(680,380, 680,304,x,y)>0 
                    && impl_line(680,304, 669,302,x,y)>0
@@ -88,7 +87,7 @@ void draw()
                stroke(#393613,180);
              
            else if(impl_eli(715,285, 20,60,x,y) < 0)
-                stroke(30, 150+random(-20,20), 25, 180);
+                stroke(#28711A,180);
             else if(impl_line(710,388, 720,390, x,y)>0 
                    && impl_line(720,380, 720,304,x,y)>0 
                    && impl_line(720,304, 710,302,x,y)>0
@@ -96,7 +95,7 @@ void draw()
                stroke(#393613,180);  
                
             else if(impl_eli(630,265, 25,65,x,y) < 0)
-                stroke(30, 150+random(-20,20), 25, 180);
+                stroke(#28711A,180);
             else if(impl_line(625,372, 635,372, x,y)>0 
                    && impl_line(635,372, 635,304,x,y)>0 
                    && impl_line(635,304, 625,302,x,y)>0
@@ -104,7 +103,7 @@ void draw()
                stroke(#393613,180);    
             
              else if(impl_eli(587,278, 20,45,x,y) < 0)
-                stroke(30, 150+random(-20,20), 25, 180);
+                stroke(#28711A,180);
             else if(impl_line(582,365, 592,365, x,y)>0 
                    && impl_line(592,365, 592,304,x,y)>0 
                    && impl_line(592,304, 582,302,x,y)>0
