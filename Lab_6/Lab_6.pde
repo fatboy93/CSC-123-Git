@@ -4,18 +4,20 @@
 */
 boolean  star;
 float end;
+PFont font;
 void setup()
 {
     size(800,500);
     star = false;
     end = 0;
+    font = loadFont("KunstlerScript-48.vlw");
    // noLoop();
 }
 
 void draw()
 {
   end++;
-    if(end > 3)
+    if(end > 4)
         noLoop();
     //background(0);
     for(int x=-10; x<=width; x+=2)
@@ -147,6 +149,11 @@ void draw()
             line(x,y, x+random(2,5), y+random(2,5));
            // ellipse(x,y,5,5);
         }
+    }
+    if (end>4)
+    {
+        textFont(font, 25);
+        text("Nghia Nguyen", width-120, height -10);
     }
     save("lab6.jpeg");
 }
