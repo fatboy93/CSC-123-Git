@@ -1,3 +1,9 @@
+/*
+Nghia Nguyen
+CPE 103 - Project 2
+Looking for some lights!?!
+*/
+
 float t, x, y, rad, count_t_r, count_s_r, count_t_l, count_s_l, count_b_l, count_b_r;
 float count_t_m, count_s_m, count_b_m, count_buf, count_star;
 boolean right, left, mid, buf, text_on;
