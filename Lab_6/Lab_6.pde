@@ -15,7 +15,7 @@ void setup()
 void draw()
 {
   end++;
-    if(end > 4)
+    if(end > 3)
         noLoop();
     //background(0);
     for(int x=-10; x<=width; x+=2)
@@ -28,6 +28,18 @@ void draw()
         
           // else if(impl_eli(300, 500, 100,150, x,y) < 0)
              // stroke(#76384C,180);
+           //people
+           else if(impl_eli(301,344,5,10,x,y)<0)
+               stroke(#414314,200);
+           else if(impl_eli(301,330,6,6,x,y)<0)
+               stroke(#414314,200);
+               
+           else if(impl_eli(315,344,5,10,x,y)<0)
+               stroke(#414314,200);
+           else if(impl_eli(315,330,6,6,x,y)<0)
+               stroke(#414314,200);
+           //camp
+           
            //kite
            else if(impl_line(338,233, 360,222, x,y)>0 
                    && impl_line(354,207, 360,222,x,y)<0 
@@ -50,11 +62,12 @@ void draw()
                    && impl_line(420,191, 431,217,x,y)>0)
                stroke(#42EA15, 180);
                
-          else if(impl_line(668,230,692,211, x,y)>0 
+         /* else if(impl_line(668,230,692,211, x,y)>0 
                    && impl_line(692,211, 689,197,x,y)>0 
                    && impl_line(689,197, 678,201,x,y)>0
                    && impl_line(678,201, 668,230,x,y)>0)
                stroke(#FF0808, 180);  
+          */
            else if(impl_line(544,166,511,152, x,y)>0 
                    && impl_line(511,152,498,164,x,y)>0 
                    && impl_line(498,164,510,178,x,y)>0
