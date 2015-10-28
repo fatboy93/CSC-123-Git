@@ -3,7 +3,8 @@ PVector v1;
 float speed, curX, curY, rot;
 boolean move;
 color  c_b1, c_b2, c_b3;
-color c_b = color(random(255),random(255), random(255));
+//color c_b = color(random(255),random(255), random(255));
+float change_color = 0;
 void setup()
 {
     size(600,600);
@@ -19,7 +20,7 @@ void setup()
     c_b3 = color(random(255), random(255), random(255));
 }
 
-void batman(float start_x, float start_y)
+void batman(float start_x, float start_y, color c_b)
 {
    
   color black = color(0);
@@ -30,13 +31,13 @@ void batman(float start_x, float start_y)
     noStroke();
        // translate(x1,y1);
        translate(start_x, start_y);
-        if(move)
-         {
+        //if(move)
+         //{
            if(v1.x >0)
              rotate(rot+PI/2);
            else
              rotate(rot-PI/2);
-         }
+       //  }
        
        // stroke(random(255), random(255), random(255));
        scale(.2);
@@ -106,25 +107,26 @@ void butterfly(float start_x, float start_y, float size_b, color c1)
 void draw()
 {
   background(0);
-  fill(255);
- ellipse(width/2, height/2, 200,200);
-  if(move)
-  {
-    
+//  fill(255);
+// ellipse(width/2, height/2, 200,200);
+ // if(move)
+  //{
     v1 = new PVector(mouseX - curX, mouseY-curY);
     v1.normalize();
     v1.mult(speed);
     rot = atan((mouseY-curY)/(mouseX-curX));
-    if(pow(curX - width/2,2)+pow(curY-height/2,2)-100*100 < 0)
+    //if(pow(curX - width/2,2)+pow(curY-height/2,2)-100*100 < 0)
       curX += v1.x;
       curY += v1.y;
-  }
+  //}
+  if(change_color++ % 60 == 0)
+      c_b1 = color(random(255),random(255), random(255));
     pushMatrix();
        // translate(curX, curY);
-        batman(curX +80, curY);
-        butterfly(curX, curY, .5, c_b1);
-        butterfly(curX+30, curY-30, .7, c_b2);
-        butterfly(curX-20, curY+30, .3, c_b3);
+        batman(curX, curY, c_b1);
+       // butterfly(curX, curY, .5, c_b1);
+        //butterfly(curX+30, curY-30, .7, c_b2);
+       // butterfly(curX-20, curY+30, .3, c_b3);
         
     popMatrix();
    

@@ -48,22 +48,22 @@ void draw()
                    && impl_line(354,207, 360,222,x,y)<0 
                    && impl_line(354,207, 343,210,x,y)>0
                    && impl_line(343,210, 338,233,x,y)>0)
-               stroke(#FCF112, 180);
+               stroke(230+random(-20,20), 230+random(-20,20),0, 180);
             else if(impl_line(273,185,261,156,x,y)>0 
                    && impl_line(261,156, 245,152,x,y)>0
-                   && impl_line(245,152, 245,173,x,y)>0
+                   && impl_line(245,152, 245,173,x,y)>0  
                    && impl_line(245, 173,273,185,x,y)>0)
                stroke(#FC443D, 180);
             else if(impl_line(177,240,192,214, x,y)>0 
                    && impl_line(192,214, 185,200,x,y)>0 
                    && impl_line(185,200, 172,215,x,y)>0
                    && impl_line(172,215, 177,240,x,y)>0)
-               stroke(#FF0000, 180);
+               stroke(230+random(-20,20),0,0, 180);
            else if(impl_line(431,217,442,188, x,y)>0 
                    && impl_line(442,188, 431,175,x,y)>0 
                    && impl_line(431,175, 420,191,x,y)>0
                    && impl_line(420,191, 431,217,x,y)>0)
-               stroke(#42EA15, 180);
+               stroke(0,230+random(-20,20),0, 180);
                
          /* else if(impl_line(668,230,692,211, x,y)>0 
                    && impl_line(692,211, 689,197,x,y)>0 
@@ -141,7 +141,7 @@ void draw()
                 stroke(#285283, 128);
             else
                 //fill(0,120,120,128);
-               stroke(0,120,120,128);
+               stroke(0,120+random(-20,20),120+random(-20,20),128);
             if(star)
              {
                ellipse(x,y,1,1);
@@ -152,12 +152,12 @@ void draw()
            // ellipse(x,y,5,5);
         }
     }
-    if (end>4)
+   /* if (end>4)
     {
         textFont(font, 25);
         text("Nghia Nguyen", width-120, height -10);
-    }
-  //  save("lab6.jpeg");
+    }*/
+    save("lab6.jpeg");
 }
 
 float impl_circ(float center_x, float center_y, float x, float y, float rad_cir)
