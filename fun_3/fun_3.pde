@@ -6,10 +6,10 @@ float rot, speed;
 float change_color = 0;
 color c_b1 = color(random(255), random(255), random(255));
 boolean collide = false;
-boolean ball_on = false;
+boolean ball_on = false, stop_game = false;
 float bx, by;
 int points;
-int time = 1800;
+int time = 700;
 void setup()
 {
   size(500,500);
@@ -87,50 +87,67 @@ void batman(float start_x, float start_y, color c_b)
 
 void draw()
 {
-  background(0);
-  if(collide)
-  {
-     bx = random(50,width-50);
-     by = random(50,height-50);
-     c_b1 = color(random(255), random(255), random(255));
-     collide = false;
-     points++;
-  }
-  ///if(ball_on)
-    ball(bx,by, 10, c_b1);
-  if(pow(curX - bx,2) + pow(curY - by, 2) - 2*15*15 <= 0)
-        collide = true;
-      
-    v1 = new PVector(mouseX - curX, mouseY-curY);
-    v1.normalize();
-    v1.mult(speed);
-    rot = atan((mouseY-curY)/(mouseX-curX));
-    //if(pow(curX - width/2,2)+pow(curY-height/2,2)-100*100 < 0)
-      curX += v1.x;
-      curY += v1.y;
-  //}
-  if(change_color++ % 60 == 0)
-      c_b1 = color(random(255),random(255), random(255));
-    pushMatrix();
-       // translate(curX, curY);
-        batman(curX, curY, c_b1);
-       // butterfly(curX, curY, .5, c_b1);
-        //butterfly(curX+30, curY-30, .7, c_b2);
-       // butterfly(curX-20, curY+30, .3, c_b3);
+  if(time>0)
+   { background(0);
+    if(collide)
+    {
+       bx = random(50,width-50);
+       by = random(50,height-50);
+       c_b1 = color(random(255), random(255), random(255));
+       collide = false;
+       points++;
+    }
+    ///if(ball_on)
+      ball(bx,by, 10, c_b1);
+    if(pow(curX - bx,2) + pow(curY - by, 2) - 2*15*15 <= 0)
+          collide = true;
         
-    popMatrix();
-
+      v1 = new PVector(mouseX - curX, mouseY-curY);
+      v1.normalize();
+      v1.mult(speed);
+      rot = atan((mouseY-curY)/(mouseX-curX));
+      //if(pow(curX - width/2,2)+pow(curY-height/2,2)-100*100 < 0)
+        curX += v1.x;
+        curY += v1.y;
+    //}
+    if(change_color++ % 60 == 0)
+        c_b1 = color(random(255),random(255), random(255));
+      pushMatrix();
+         // translate(curX, curY);
+          batman(curX, curY, c_b1);
+         // butterfly(curX, curY, .5, c_b1);
+          //butterfly(curX+30, curY-30, .7, c_b2);
+         // butterfly(curX-20, curY+30, .3, c_b3);
+          
+      popMatrix();
   
-   if(curX > width-20 || curX < 20)
-       v1.x = -v1.x;
-   if(curY > height-20 || curY < 20)
-       v1.y = -v1.y;
-   fill(255);    
-   text("Points: ", 10,20 );
-   text(points, 50,20);
-   text("Time: ",400,20);
-   text(time, 450,20);
-  
-   time--;
+    
+     if(curX > width-20 || curX < 20)
+         v1.x = -v1.x;
+     if(curY > height-20 || curY < 20)
+         v1.y = -v1.y;
+     fill(255);    
+     textSize(20);
+     text("Points: ", 10,20 );
+     text(points, 80,20);
+     text("Time: ",410,20);
+     text(time/60, 465,20);
+     time--;
+  }
+   else
+   {  
+       pushMatrix();
+         translate(width/2, height/2);
+         textAlign(CENTER);
+         fill(255);
+         textSize(50);
+         text("Game over!!!", 0, 0);
+         textSize(40);
+         text("Scores: ", 0, 50);
+         text(points, 100,50);
+       popMatrix();
+   }
+   
+   
  
 }
