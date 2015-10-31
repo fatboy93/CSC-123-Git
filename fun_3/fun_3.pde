@@ -20,6 +20,7 @@ float real_time = 0;
 boolean start_game = false;
 boolean good_distance = false;
 boolean restart = false;
+boolean nogood = false;
 void setup()
 {
   background(0);
@@ -134,7 +135,7 @@ void ready(float ready_time)
     fill(255);
     textSize(20);
     textAlign(CENTER);
-    text("Ready in " + int(200 - ready_time)/60, width/2, 20);
+    text("Ready in " + int((200 - ready_time)/60), width/2, 20);
 }
 void draw()
 {
@@ -193,11 +194,15 @@ void draw()
            by = random(50,height-50);
            for(int i=0; i<size_box; i++)
            {
-               if(pow(bx-box_x[i],2) + pow(by-box_y[i],2) - 40*40 > 0) 
-                   good_distance = true;
-               else
-                   good_distance = false;
-           }
+               if(pow(bx-box_x[i],2) + pow(by-box_y[i],2) - 50*50 < 0) 
+               {
+                    nogood = true;
+                    i = size_box;
+               }
+         }
+           if(!nogood)
+               good_distance = true;
+           
         }
         good_distance = false;
          c_b1 = color(random(255), random(255), random(255), 120);
@@ -234,7 +239,7 @@ void draw()
       else if (lives < 1)
           text("T-T", width/2, 20);
       else
-            text("Change boxes in: " + int(2100 - time)/60, width/2, 20);
+            text("Change boxes in: " + int((2100 - time)/60), width/2, 20);
            
       
       //printing out lives
