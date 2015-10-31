@@ -19,7 +19,7 @@ boolean box_y_on = true;
 float real_time = 0;
 boolean start_game = false;
 boolean good_distance = false;
-
+boolean restart = false;
 void setup()
 {
   background(0);
@@ -182,7 +182,7 @@ void draw()
        start_box_x = 25;
       
       //draw balls
-          ball(bx,by, 10, c_b1);
+          ball(bx,by, 8, c_b1);
           
        //scores of bat meet the ball
       if(eat_ball)
@@ -195,6 +195,8 @@ void draw()
            {
                if(pow(bx-box_x[i],2) + pow(by-box_y[i],2) - 40*40 > 0) 
                    good_distance = true;
+               else
+                   good_distance = false;
            }
         }
         good_distance = false;
@@ -266,7 +268,7 @@ void draw()
            fill(random(255), random(255), random(255));
            text("PLAY AGAIN!!!", 0, 150);
          popMatrix();
-         start_game = false;
+        restart = true;
      }
   }
   else  //print instruction and start game
@@ -298,12 +300,11 @@ void draw()
         text("START!!!", 0, 150);
       popMatrix();
   }
-  
-  
-  
 }
 
 void mousePressed()
 {
+    if(restart == true)
+       lives = 3;
     start_game = true;
 }
