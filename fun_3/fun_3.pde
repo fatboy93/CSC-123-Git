@@ -1,3 +1,8 @@
+/*
+  Nghia Nguyen
+  CPE 123
+  Fun game: Bat Bangs Balls
+*/
 PVector v1, v2;
 float curX;
 float curY;
@@ -197,7 +202,7 @@ void draw()
                if(pow(bx-box_x[i],2) + pow(by-box_y[i],2) - 50*50 < 0) 
                {
                     nogood = true;
-                    i = size_box;
+                    i = size_box-2;
                }
          }
            if(!nogood)
