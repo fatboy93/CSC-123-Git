@@ -3,7 +3,8 @@
   CPE 123
   Fun game: Bat Bangs Balls
 */
-PVector v1, v2;
+PVector v1, vb;
+PVector[] v_box;
 float curX;
 float curY;
 color[] b_c;
@@ -43,6 +44,7 @@ void setup()
     size_box = 10;
     box_x = new float[size_box];
     box_y = new float[size_box];
+    v_box = new PVector[size_box];
     start_box_x = 25;
 }
 
@@ -162,14 +164,30 @@ void draw()
       
       
      //draw box
+     //make box move
       fill(255,0,0);
       rectMode(CENTER);
       for(int i=0; i<size_box; i++)
       {
-          box_x[i] = start_box_x;
+          
           //only draw y one time
           if(box_y_on)
+          {
+            box_x[i] = width/2;
             box_y[i] = random(50,height-25);
+            v_box[i] = new PVector(random(-1,1),random(-1,1)); 
+             vb = new PVector(random(-1,1), random(-1,1));
+          }
+          //make box move
+           
+          v_box[i].normalize();
+          v_box[i].mult(random(1.5,2));
+          box_y[i] += v_box[i].y;
+          box_x[i] += v_box[i].x;
+          if(box_y[i] < 25 || box_y[i] > height-20)
+              v_box[i].y = - v_box[i].y;
+          if(box_x[i] < 10 || box_x[i] > width - 10)
+              v_box[i].x = - v_box[i].x;
           rect(box_x[i], box_y[i], 10,10);  
          // draw_box(box_x[i], box_y[i]);
           start_box_x += 45;
@@ -188,28 +206,35 @@ void draw()
        start_box_x = 25;
       
       //draw balls
+         
+          vb.normalize();
+          vb.mult(1.5);
           ball(bx,by, 8, c_b1);
-          
+          bx+=vb.x;
+          by+=vb.y;
+          if(bx<20 || bx > width-20)
+             vb.x = -vb.x;
+          if(by<50 || by > height - 40)
+             vb.y = -vb.y;
        //scores of bat meet the ball
       if(eat_ball)
       {
-        while(!good_distance)
+        bx = random(50,width-50);
+        by = random(50,height-50);
+      /*  while(!good_distance)
         {
            bx = random(50,width-50);
            by = random(50,height-50);
            for(int i=0; i<size_box; i++)
            {
-               if(pow(bx-box_x[i],2) + pow(by-box_y[i],2) - 50*50 < 0) 
-               {
+               if((pow(bx-box_x[i],2) + pow(by-box_y[i],2) - 30*30) < 0) 
                     nogood = true;
-                    i = size_box-2;
-               }
-         }
+           }
            if(!nogood)
                good_distance = true;
            
         }
-        good_distance = false;
+        good_distance = false;*/
          c_b1 = color(random(255), random(255), random(255), 120);
          eat_ball = false;
          points++;
@@ -269,16 +294,17 @@ void draw()
            text("Game Over!!!", 0, -100);
            textSize(40);
            fill(#F22544);
-           text("Scores: " + points, -10, -20);
+           text("Scores: " + points, 0, -20);
            textSize(30);
            fill(#DFE53A);
-           text("Time playing: " + int(real_time/60), -20, 50);
+           text("Time playing: " + int(real_time/60) + " seconds", 0, 50);
            text("Click any where to", 0,90);
            textSize(50);
            fill(random(255), random(255), random(255));
            text("PLAY AGAIN!!!", 0, 150);
          popMatrix();
         restart = true;
+       
      }
   }
   else  //print instruction and start game
@@ -315,6 +341,10 @@ void draw()
 void mousePressed()
 {
     if(restart == true)
-       lives = 3;
+    {
+        real_time = 0;
+        points = 0;
+        lives = 3;
+    }
     start_game = true;
 }
