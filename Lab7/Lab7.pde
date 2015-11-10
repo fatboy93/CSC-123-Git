@@ -1,11 +1,12 @@
+import gifAnimation.*;
 float e = 2.7182818284590452353602874713527;
 float[] but_x;
 float[] but_y;
 color[] but_c;
 PVector[] but_dir;
-int but_size, bug_size, cloud_size;
+int but_size, bug_size, cloud_size, pedal_size, flower_size;
 boolean moving = true, original = true;
-PImage ladybug, grass, cloud, sun;
+PImage ladybug, grass, cloud, sun, tree, pedal, flower;
 float[] bug_x;
 float[] bug_y;
 float[] bug_s;
@@ -15,7 +16,12 @@ float[] cloud_s;
 PVector[] cloud_dir;
 float ang, ang_sun;
 PVector[] bug_dir;
-
+float[] pedal_x;
+float[] pedal_y;
+float[] flower_x;
+float[] flower_y;
+float ang_flower=0;
+GifMaker gifExport;
 void setup()
 {
     frameRate(60);
@@ -24,6 +30,8 @@ void setup()
     but_size = 5;
     bug_size = 4;
     cloud_size = 10;
+    flower_size = 10;
+    pedal_size = 30;
     but_x = new float[but_size];
     but_y = new float[but_size];
     but_dir = new PVector[but_size];
@@ -32,6 +40,9 @@ void setup()
     grass = loadImage("data/Grass.png");
     cloud = loadImage("data/cloud.png");
     sun = loadImage("data/sun3.png");
+    tree = loadImage("data/tree.png");
+    flower = loadImage("data/flower.png");
+    pedal = loadImage("data/pedal.png");
     bug_x = new float[bug_size];
     bug_y = new float[bug_size];
     bug_dir = new PVector[bug_size];
@@ -40,8 +51,14 @@ void setup()
     cloud_y = new float[cloud_size];
     cloud_s = new float[cloud_size];
     cloud_dir = new PVector[cloud_size];
+    pedal_x = new float[pedal_size];
+    pedal_y = new float[pedal_size];
+    flower_x = new float[flower_size];
+    flower_y = new float[flower_size];
+    ang_sun = 1;
+    gifExport = new GifMaker(this, "export.gif");
+    gifExport.setRepeat(0);
 }
-
 void butterfly(float cx, float cy, color c, float rad, float rot)
 {
   float x, y, t=0;
@@ -86,12 +103,46 @@ void draw_sun(float cx, float cy)
 {
   pushMatrix();
      translate(cx,cy);
-     //imageMode(CORNER);
+     imageMode(CENTER);
      rotate(radians(ang_sun));
      scale(.4);
      
      image(sun,0,0);
   popMatrix();
+}
+
+void draw_tree(float cx, float cy, float size )
+{
+    pushMatrix();
+        translate(cx,cy);
+        imageMode(CENTER);
+        scale(size);
+        image(tree,0,0);
+    popMatrix();
+}
+
+void draw_flower(float cx, float cy)
+{
+    pushMatrix();
+        translate(cx,cy);
+        imageMode(CENTER);
+        rotate(ang_flower);
+        scale(.3);
+        image(flower,0,0);
+    popMatrix();
+    
+}
+
+void draw_pedal(float cx, float cy)
+{
+    pushMatrix();
+        translate(cx,cy);
+        imageMode(CENTER);
+        rotate(ang_flower);
+        scale(.5);
+        image(pedal,0,0);
+        
+    popMatrix();
 }
 void draw()
 { 
@@ -103,8 +154,15 @@ void draw()
         image(grass,0,250);
     popMatrix();
     //draw sun
-    draw_sun(0,0);
-    //ang_sun++;
+    draw_sun(60,60);
+    ang_sun+=.2;
+    ang_flower += .01;
+   
+    //draw tree
+    
+    draw_tree(.6*width, .6*height, .3);
+    draw_tree(.85*width, .6*height, .4);
+    draw_tree(.75*width, .7*height, .5);
     
     //butterflies
     for(int i=0; i<but_size; i++)
@@ -177,7 +235,36 @@ void draw()
         draw_cloud(cloud_x[i], cloud_y[i], cloud_s[i], 0); 
     }
     
+    for(int i=0; i<flower_size; i++)
+    {
+        if(original)
+        {
+            flower_x[i] = random(30, .7*width);
+            flower_y[i] = random(.65*height, .95*height);
+        }
+        //if(flower_y[i] < .9*height)
+          //  flower_y[i]+= .2;
+            
+        draw_flower(flower_x[i], flower_y[i]);
+          
+    }
+    
+    for(int i=0; i<pedal_size;i++)
+    {
+        if(original)
+        {
+            pedal_x[i] = random(.6*width, .98*width);
+            pedal_y[i] = random(.5*height, .7*height);
+        }
+        
+        if(pedal_y[i] < .9*height)
+            pedal_y[i] += .1;
+        draw_pedal(pedal_x[i], pedal_y[i]);
+    }
     original = false;
+    gifExport.setDelay(1000/60);
+    gifExport.addFrame();
+    
 }
 
 void mousePressed()
