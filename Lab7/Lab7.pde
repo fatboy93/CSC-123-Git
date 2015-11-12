@@ -1,4 +1,4 @@
-import gifAnimation.*;
+//import gifAnimation.*;
 float e = 2.7182818284590452353602874713527;
 float[] but_x;
 float[] but_y;
@@ -21,7 +21,7 @@ float[] pedal_y;
 float[] flower_x;
 float[] flower_y;
 float ang_flower=0;
-GifMaker gifExport;
+//GifMaker gifExport;
 void setup()
 {
     frameRate(60);
@@ -56,8 +56,8 @@ void setup()
     flower_x = new float[flower_size];
     flower_y = new float[flower_size];
     ang_sun = 1;
-    gifExport = new GifMaker(this, "export.gif");
-    gifExport.setRepeat(0);
+   // gifExport = new GifMaker(this, "export.gif");
+   // gifExport.setRepeat(0);
 }
 void butterfly(float cx, float cy, color c, float rad, float rot)
 {
@@ -262,8 +262,8 @@ void draw()
         draw_pedal(pedal_x[i], pedal_y[i]);
     }
     original = false;
-    gifExport.setDelay(1000/60);
-    gifExport.addFrame();
+   // gifExport.setDelay(1000/60);
+   // gifExport.addFrame();
     
 }
 
