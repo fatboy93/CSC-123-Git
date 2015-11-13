@@ -1,5 +1,6 @@
-PImage me, liquid, turkey, smoke, hat, mustache, puff;
-boolean saliva, spindle_f, spindle_b, left_eye, right_eye, puff_out;
+PImage me, liquid, turkey, smoke, hat, mustache, puff, brow_eye, nose, splash;
+boolean saliva, spindle_f, spindle_b, left_eye, right_eye, puff_out, original;
+boolean original_2, fill_but, running_nose;
 PVector[] liquid_dir;
 float[] liquid_x;
 float[] liquid_y;
@@ -7,8 +8,14 @@ PVector[] puff_dir;
 float[] puff_x;
 float[] puff_y;
 int liquid_size, countFrame, originFrame, passing_size, turkey_x, turkey_y, end;
-int count_left, puff_size;
+int count_left, puff_size,but_size;
 float mouth_x, mouth_y;
+float e = 2.7182818284590452353602874713527;
+float[] but_x;
+float[] but_y;
+color[] but_c;
+PVector[] but_dir;
+float ang_but, nose_size;
 void setup()
 {
     size(600,600);
@@ -19,15 +26,23 @@ void setup()
     hat = loadImage("data/hat.png");
     mustache = loadImage("data/mustache.png");
     puff = loadImage("data/puff.png");
+    brow_eye = loadImage("data/brow_eye.png");
+    nose = loadImage("data/nose.png");
+    splash = loadImage("data/running_nose.png");
     saliva = false;
     liquid_size = 20;
-    puff_size = 20;
+    puff_size = 100;
+    but_size = 20;
     liquid_x = new float[liquid_size];
     liquid_y = new float[liquid_size];
     liquid_dir = new PVector[liquid_size];
     puff_dir = new PVector[puff_size];
     puff_x = new float[puff_size];
     puff_y = new float[puff_size];
+    but_x = new float[but_size];
+    but_y = new float[but_size];
+    but_dir = new PVector[but_size];
+    but_c = new color[but_size];
     countFrame = 0;
     passing_size = 0;
     mouth_x = 50;
@@ -39,7 +54,14 @@ void setup()
     spindle_b = false;
     left_eye = false;
     right_eye = false;
-    puff_out =false;
+    puff_out = true;
+    original = true;
+    original_2 = true;
+    fill_but = false;
+    ang_but = 1;
+    running_nose = false;
+    nose_size = 0.2;
+    
 }
 
 void draw()
@@ -47,18 +69,111 @@ void draw()
      countFrame++;
      //background me
      draw_me();
+     //brow_eye
+      draw_brow_eye(300,150,.5);
      //dimples
      draw_dimples();
+     //nose
+     if(!running_nose)
+          draw_nose(295,310,.2);
+      else
+      {
+        if(countFrame %20 == 0 && nose_size < .4)
+             nose_size += .02;
+        draw_nose(295,310, nose_size);
+        if(nose_size >.4)
+            image(splash,width/2, height/2);
+      }
       //mustache
-     draw_mustache();
+    // draw_mustache();
      //hat
-     draw_hat();
+    // draw_hat();
      //mouth
      saliva_turkey();
+     if(left_eye || right_eye)
+     {
+          fill_but = false;
+          crazy_eye();
+          flying_but();
+     }
      
-
+    
 }
 
+void draw_nose(float cx, float cy, float size)
+{
+    pushMatrix();
+        translate(cx, cy);
+        scale(size);
+        imageMode(CENTER);
+        image(nose,0,0);
+    popMatrix();
+}
+void draw_brow_eye(float cx, float cy, float size)
+{
+    pushMatrix();
+        translate(cx, cy);
+        scale(size);
+        imageMode(CENTER);
+        image(brow_eye,0,0);
+    popMatrix();
+}
+void crazy_eye()
+{
+    butterfly(220,255, color(#2D5DDE),2, ang_but+=.2);
+    butterfly(220,255, color(#2D5DDE),2, -ang_but);
+    butterfly(360,255, color(#2D5DDE),2, ang_but);
+    butterfly(360,255, color(#2D5DDE),2, -ang_but);
+    fill_but = true;
+}
+void flying_but()
+{
+     for(int i=0; i<but_size; i++)
+    {  
+          but_dir[i].normalize();
+          but_dir[i].mult(random(.4,.7));
+          but_x[i] += but_dir[i].x;
+          but_y[i] += but_dir[i].y;
+          
+          
+        /*  if(but_x[i] <= 20 || but_x[i]>=width-20)
+              but_dir[i].x = - but_dir[i].x;
+          if(but_y[i] <= .4*height || but_y[i] >= .6*height)
+              but_dir[i].y = - but_dir[i].y;
+          */    
+        float ang = atan2(but_dir[i].y, but_dir[i].x);          
+        butterfly(but_x[i], but_y[i], but_c[i], random(3,4), ang);
+    }
+}
+void butterfly(float cx, float cy, color c, float rad, float rot)
+{
+  float x, y, t=0;
+    pushMatrix();
+    if(fill_but)
+    {
+      fill(c);
+      noStroke();
+    }
+    else
+    {
+      stroke(c);
+      noFill();
+    }
+      translate(cx,cy);
+      rotate(rot+PI/2);
+     // noStroke();
+    // stroke(c);
+      beginShape();
+      for(int i=0; i<50; i++)
+      {
+          x = rad*(sin(t))*(pow(e,cos(t)) - 2*cos(4*t) - pow(sin(t/12),5));
+          y = -rad*(cos(t))*(pow(e,cos(t)) - 2*cos(4*t) - pow(sin(t/12),5));
+          curveVertex(x,y);
+          t+=PI/20;
+      }
+      endShape();
+    popMatrix();
+}
 void draw_mustache()
 {
     mustache.loadPixels();
@@ -68,7 +183,7 @@ void draw_mustache()
     {
         for(int y=0; y<mustache.height; y++)
         {
-            loc_screen = x +220 + (y+310)*width;
+            loc_screen = x +220 + (y+320)*width;
             if(mustache.pixels[x+y*mustache.width] != color(255))
                 pixels[loc_screen] = mustache.pixels[x + y*mustache.width];
         }
@@ -129,8 +244,8 @@ void draw_dimples()
             spindle_b = false;
          }
      }
-     draw_spindle(150, 350,1, end);
-     draw_spindle(430, 350,1, end);
+     draw_spindle(150, 350,-1,1, end);
+     draw_spindle(430, 350,1,1, end);
     
 }
 void draw_me()
@@ -146,12 +261,20 @@ void draw_me()
              if(impl_cir(220,250,x,y, 50) < 0 || impl_cir(370,250,x,y,50) < 0
                  || impl_eli(290,400,x,y,mouth_x, mouth_y) < 0)
                  pixels[loc] = color(brightness(me.pixels[loc]) + random(-20,0));     
-            else if(left_eye && (x>0 && x< 300 && y>0 && y<300 && x%5==0 ))
-                 pixels[loc] = color(brightness(me.pixels[loc]) + random(-20,0));  
-            else if(left_eye && (x>0 && x< 300 && y>300 && y<600 && y%5==0 ))
-                 pixels[loc] = color(brightness(me.pixels[loc]) + random(-20,0)); 
-            else if(left_eye && x < 300)
-                 pixels[loc] = color(#EDDF41,128);
+           /* else if(x>0 && x<150 && y>50 && y<120 && y%2==0)
+                 pixels[loc] = color(brightness(me.pixels[loc]) + random(-20,0));
+            else if(x>0 && x<150 && y>50 && y<120)
+                 pixels[loc] = color(#A2E576, 128);
+            else if(x>150 &&x < 250 && y<50 && x%2 == 0)
+                 pixels[loc] = color(brightness(me.pixels[loc]) + random(-20,0));
+            else if(impl_eli(300,50,x,y, 200,50) < 0 && x%2==0)
+                  pixels[loc] = color(brightness(me.pixels[loc]) + random(-20,0));*/
+            else if((impl_line(0,100,100,0,x,y) > 0 ||
+                     impl_line(500,0,600,100,x,y) > 0 ||
+                     impl_line(0,500,100,600,x,y) < 0 ||
+                     impl_line(500,600,600,500,x,y) < 0 )
+                    && y%2==0)
+                  pixels[loc] = color(brightness(me.pixels[loc]) + random(-20,0));
             else
                  pixels[loc] = color(#5FDB9A, 128);    
          }
@@ -232,14 +355,26 @@ void draw_saliva(int size)
 
 void flying_puff()
 {
-     if(passing_size < puff_size && countFrame % 45 == 0)
+     if(passing_size < puff_size && countFrame % 80 == 0)
               passing_size++;
           
      draw_puff(passing_size); 
 }
 void draw_puff(int size)
 {
-    for(int i=0; i<size; i++)
+  if(original)
+  {
+      for(int i=0; i<puff_size;i++)
+      {
+         puff_dir[i] = new PVector(random(-.5,.5), random(-1,0));
+         puff_dir[i].normalize();
+         puff_dir[i].mult(random(1,2));
+         puff_x[i] = 0;
+         puff_y[i] = 0;        
+      }
+      original  = false;
+  }
+  for(int i=0; i<size; i++)
   {
     puff_y[i] += puff_dir[i].y;
     puff_x[i] += puff_dir[i].x;
@@ -269,7 +404,7 @@ void turkey_text(int size)
         
 }
 
-void draw_spindle(float cx, float cy, float rad, float count)
+void draw_spindle(float cx, float cy, float rad1, float rad2, float count)
 {
     float x,y,t=0;
     fill(#E84475);
@@ -278,10 +413,17 @@ void draw_spindle(float cx, float cy, float rad, float count)
     translate(cx,cy);
     for(int i=0; i<count; i++)
     {
-        x = rad*cos(t);
-        y = rad*sin(t);
+        x = rad1*cos(t);
+        y = rad2*sin(t);
         t+=PI/10;
-        rad += .5;
+        if(rad1 > 0)
+            rad1 += .5;
+        else
+            rad1 -= .5;
+        if(rad2 < 0)
+            rad2 -= .5;
+        else
+            rad2 += .5;
         ellipse(x,y,3,3);
     }
     popMatrix();
@@ -306,14 +448,52 @@ void mousePressed()
              liquid_y[i] = 0;        
          }
     }
-    if(impl_cir(220,250,mouseX,mouseY, 50) < 0)
+   /* if(impl_cir(220,250,mouseX,mouseY, 50) < 0)
     {
+      for(int i=0; i<but_size; i++)
+       {    
+           if(i<but_size/2)
+           {
+              but_x[i] = 220;
+              but_y[i] = 250;
+           }
+           else
+           {
+               but_x[i] = 370;
+               but_y[i] = 250;
+           }
+            but_dir[i] = new PVector(random(-1,1), random(-1,1));
+            but_c[i] = color(random(255), random(255), random(255));
+       }
         if(!left_eye)
             left_eye = true;
         else
           left_eye = false;
-    }
+    }*/
     
+    if(impl_cir(370,250, mouseX, mouseY, 50) < 0 
+        || impl_cir(220,250,mouseX,mouseY, 50) < 0)
+    {
+       for(int i=0; i<but_size; i++)
+       {    
+           if(i<but_size/2)
+           {
+              but_x[i] = 220;
+              but_y[i] = 250;
+           }
+           else
+           {
+               but_x[i] = 370;
+               but_y[i] = 250;
+           }
+            but_dir[i] = new PVector(random(-1,1), random(-1,1));
+            but_c[i] = color(random(255), random(255), random(255));
+       }
+        if(!right_eye)
+            right_eye = true;
+        else
+          right_eye = false;
+    }
     if(impl_cir(170,430,mouseX, mouseY,65) < 0)
     {
         if(!puff_out)
@@ -332,6 +512,10 @@ void mousePressed()
         else
             puff_out = false;
     }
+    if(impl_cir(295, 310, mouseX, mouseY, 40) < 0)
+    {
+        running_nose = true;
+    }
 }
 
 
@@ -343,4 +527,10 @@ float impl_cir(float cx, float cy, float x, float y, float rad)
 float impl_eli(float cx, float cy, float x, float y, float w, float h)
 {
     return (pow(x-cx,2)/pow(w,2) + pow(y-cy,2)/pow(h,2) - 1);
+}
+
+float impl_line(float start_x, float start_y, float end_x, float end_y, float x,
+                float y)
+{
+    return ((end_y - start_y)*x - (end_x - start_x)*y - start_x*end_y + start_y*end_x);
 }
