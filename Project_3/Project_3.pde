@@ -15,7 +15,7 @@ float[] but_x;
 float[] but_y;
 color[] but_c;
 PVector[] but_dir;
-float ang_but, nose_size;
+float ang_but, nose_size, splash_x, splash_y;
 void setup()
 {
     size(600,600);
@@ -61,7 +61,8 @@ void setup()
     ang_but = 1;
     running_nose = false;
     nose_size = 0.2;
-    
+    splash_x = width/2;
+    splash_y = height/2;
 }
 
 void draw()
@@ -70,6 +71,7 @@ void draw()
      //background me
      draw_me();
      //brow_eye
+     if(!running_nose)
       draw_brow_eye(300,150,.5);
      //dimples
      draw_dimples();
@@ -78,14 +80,30 @@ void draw()
           draw_nose(295,310,.2);
       else
       {
-        if(countFrame %20 == 0 && nose_size < .4)
+        if(countFrame %10 == 0 && nose_size < .34)
              nose_size += .02;
         draw_nose(295,310, nose_size);
-        if(nose_size >.4)
-            image(splash,width/2, height/2);
+        draw_brow_eye(300,180,.25);
+        if(nose_size >.34)
+        {
+          if(splash_y<600)
+            image(splash,width/2, splash_y+=2);
+        }
+        if(splash_y >=600)
+        {
+           if(nose_size > .2)
+                  draw_nose(295,310,nose_size-=.02);
+           else 
+           {
+               splash_y = height/2;
+               running_nose = false;            
+           }
+        }
+        
       }
       //mustache
-    // draw_mustache();
+      if(splash_y>=470 || splash_y <= height/2)
+       draw_mustache();
      //hat
     // draw_hat();
      //mouth
@@ -97,6 +115,14 @@ void draw()
           flying_but();
      }
      
+      //smoke
+      if(!running_nose && !saliva)
+      {
+        draw_smoke();
+        //flying puff
+       if(puff_out)
+         flying_puff();
+      }
     
 }
 
@@ -258,8 +284,7 @@ void draw_me()
          for(int y=0; y<height; y++)
          {
              loc = x + y*width;
-             if(impl_cir(220,250,x,y, 50) < 0 || impl_cir(370,250,x,y,50) < 0
-                 || impl_eli(290,400,x,y,mouth_x, mouth_y) < 0)
+             if(impl_eli(290,400,x,y,mouth_x, mouth_y) < 0 && x%2==0)
                  pixels[loc] = color(brightness(me.pixels[loc]) + random(-20,0));     
            /* else if(x>0 && x<150 && y>50 && y<120 && y%2==0)
                  pixels[loc] = color(brightness(me.pixels[loc]) + random(-20,0));
@@ -269,12 +294,22 @@ void draw_me()
                  pixels[loc] = color(brightness(me.pixels[loc]) + random(-20,0));
             else if(impl_eli(300,50,x,y, 200,50) < 0 && x%2==0)
                   pixels[loc] = color(brightness(me.pixels[loc]) + random(-20,0));*/
+            else if((impl_cir(220, 250,x,y,50) < 0 || impl_cir(370,250,x,y,50) < 0)
+                 && x%2 ==0)
+                   pixels[loc] = color(brightness(me.pixels[loc]) + random(-20,0));
+            else if(impl_cir(220, 250,x,y,50) < 0 || impl_cir(370,250,x,y,50) < 0)
+                   pixels[loc] = color(#EAEA2F,128);  
             else if((impl_line(0,100,100,0,x,y) > 0 ||
                      impl_line(500,0,600,100,x,y) > 0 ||
                      impl_line(0,500,100,600,x,y) < 0 ||
                      impl_line(500,600,600,500,x,y) < 0 )
                     && y%2==0)
                   pixels[loc] = color(brightness(me.pixels[loc]) + random(-20,0));
+             else if(impl_line(0,100,100,0,x,y) > 0 ||
+                     impl_line(500,0,600,100,x,y) > 0 ||
+                     impl_line(0,500,100,600,x,y) < 0 ||
+                     impl_line(500,600,600,500,x,y) < 0 )
+                 pixels[loc] = color(#96C9C5,128);
             else
                  pixels[loc] = color(#5FDB9A, 128);    
          }
@@ -318,20 +353,13 @@ void saliva_turkey()
      }
      else
      {
-       //smoke
-       draw_smoke();
-        //flying puff
-       if(puff_out)
-         flying_puff();
        saliva = false;
         if(mouth_x>50)
             mouth_x--;
         if(mouth_y>5)
-        {
             mouth_y --;
-           
-            
-        }
+        else if(passing_size >= liquid_size)
+            passing_size = 1;
      }
 }
 
@@ -432,12 +460,13 @@ void mousePressed()
 {
     if(impl_eli(290,400,mouseX,mouseY,50,5) < 0)
     {
-        puff_out = false;
+        if(!saliva)
+        {
+        saliva = true;
         mouth_x = 50;
         mouth_y = 5;
         turkey_y = 450;
         originFrame = countFrame;
-        saliva = true;
         passing_size = 0;
         for(int i=0; i<liquid_size;i++)
          {
@@ -447,6 +476,9 @@ void mousePressed()
              liquid_x[i] = 0;
              liquid_y[i] = 0;        
          }
+        }
+        else saliva = false;
+         
     }
    /* if(impl_cir(220,250,mouseX,mouseY, 50) < 0)
     {
