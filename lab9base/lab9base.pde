@@ -10,6 +10,7 @@
 
 // define a particle
 boolean click;
+float e = 2.7182818284590452353602874713527;
 class Particle 
 {
    PVector loc;
@@ -17,6 +18,7 @@ class Particle
    PVector accel;
    float r;
    float life;
+   float origin_life;
    color pcolor;
   
    // constructor
@@ -28,6 +30,7 @@ class Particle
       loc = start.get();  // make a COPY of the start location vector
       r = 8.0;
       life = 100;
+      origin_life = life;
    }
     
    // TODO_1 define another constructor that allows a particle to start with a given color
@@ -39,29 +42,40 @@ class Particle
       loc = start.get();  // make a COPY of the start location vector
       r = 8.0;
       life = 100;
+       origin_life = life;
    }
    
      Particle(PVector start, color c, float l) 
    {
       accel = new PVector(0, 0.05); //gravity
-      vel = new PVector(random(-2, 2), random(-4, 0), 0);
+      vel = new PVector(random(-1, 1), random(-2, 0), 0);
       pcolor = c;
       loc = start.get();  // make a COPY of the start location vector
       r = 8.0;
       life = l;
+      origin_life = life;
    }
    // what to do each frame
-   void run(PVector ini) 
+   void run(boolean shape) 
    {
-      updateP(ini);
+    
+      updateP(shape);
       renderP(); // render is a fancy word for draw.  :)
    }
     
    // a function to update the particle each frame
-   void updateP(PVector ini) 
+   void updateP(boolean shape) 
    {
-      vel.add(accel);     
-      loc.add(vel);
+      if(shape && (life %2 == 0 || life <= .85*origin_life))
+      { 
+        vel.add(accel);     
+        loc.add(vel);
+      }
+      if(!shape)
+      {
+          vel.add(accel);     
+          loc.add(vel);
+      }
       life -= 1.0;
    }
     
@@ -100,6 +114,7 @@ class PSys
    PVector source; // where all the particles emit from
    color shade; // their main color
    float explode; //store the y-location of the bullet
+   float choice;
    // constructor
    PSys(int num, PVector init_loc) 
    {
@@ -113,14 +128,65 @@ class PSys
       explode = height;
    }
    //different life span
-   PSys(int num, PVector init_loc, float l_span) 
+   PSys(int num, PVector init_loc, float l_span, float rad, float choice) 
    {
+      this.choice = choice;
       particles = new ArrayList();
       source = init_loc.get();  // you have to do this to set a vector equal to another vector
       shade = color(random(255), random(255), random(255));  // TODO_2 use this!
+      float t = PI/20;
+      PVector cir = new PVector();
+      if(choice >= 2)
+          rad = random(2,3);
+      //else if(choice > 2)
+      //    rad = 15;
       for (int i=0; i < num; i++) 
       {
-         particles.add(new Particle(source, shade, l_span));
+        
+         if(choice <= 1)
+             particles.add(new Particle(source, shade, l_span));
+         //smiley face firework
+         else if(choice <= 2)
+         {
+             if(i<num/2)
+             {
+                 cir.x = source.x + rad*cos(t);
+                 cir.y = source.y + rad*sin(t);
+                // particles.add(new Particle(cir, shade, l_span));
+                 t += PI/20;
+             }   
+             else if(i<num*.75)
+             {
+                 cir.x = source.x+rad/2;
+                 cir.y = source.y;
+                // particles.add(new Particle(cir, shade, l_span));
+             }
+             else
+             {
+                 cir.x = source.x-rad/2;
+                 cir.y = source.y;
+                 //particles.add(new Particle(cir, shade, l_span));
+             }
+             particles.add(new Particle(cir, shade, l_span));
+         }
+         //heart firework
+         else if(choice <=3)
+         {
+             cir.x = source.x + rad*(16*pow(sin(t),3));
+             cir.y = source.y - rad*(13*cos(t) - 5*cos(2*t) - 2*cos(3*t) - cos(4*t));
+             t += PI/20;
+             rad -= .01;
+             particles.add(new Particle(cir, shade, l_span));
+         }
+         else
+         {
+             cir.x = source.x + 20*(sin(t))*(pow(e,cos(t)) - 2*cos(4*t) - pow(sin(t/12),5));
+             cir.y = source.y - 20*(cos(t))*(pow(e,cos(t)) - 2*cos(4*t) - pow(sin(t/12),5));
+             t += PI/30;
+             particles.add(new Particle(cir, shade, l_span));
+         }
+         
+         
       }
       explode = height;
    }
@@ -138,15 +204,13 @@ class PSys
    // what to do each frame
    void run() 
    {
-     //float t = PI/20;
-    // float x,y;
+     
       // go through backwards for deletes
       for (int i=particles.size()-1; i >=0; i--) 
       {
          Particle p = (Particle)particles.get(i);
          
-        // x = source.x + 50*cos(t);
-        // y = source.y + 50*sin(t);
+        
          // update each particle per frame
          if(explode > source.y)
          {
@@ -154,7 +218,7 @@ class PSys
              explode-=.2;
          }
          else
-             p.run(source);
+             p.run(choice>1.0);
          if (!p.alive()) // what is that '!' thingy??
             particles.remove(i);
             
@@ -186,7 +250,8 @@ void setup()
    // start a new particle system
    fireW1 = new PSys[num_fire_work];
    for(int i=0; i<num_fire_work; i++)
-      fireW1[i] = new PSys(100, new PVector(random(20,width-20), random(height/2)), random(60,100));
+      fireW1[i] = new PSys(100, new PVector(random(20,width-20), random(height/2)),
+                            random(60,120), random(30,50),random(0,4));
   
    
    frameRate(40);
@@ -203,7 +268,7 @@ void draw()
    {
      if(fireW1[i].dead())
        fireW1[i] = new PSys(100, new PVector(random(20,width-20), random(height/2)), 
-                            random(80,120));
+                            random(60,120), random(30,60),random(0,4));
      fireW1[i].run(); 
    }
    
@@ -215,7 +280,8 @@ void draw()
 void mousePressed()
 {
     click = true;
-    fireW2 = new PSys(100, new PVector(mouseX, mouseY), random(80,120));
+    fireW2 = new PSys(100, new PVector(mouseX, mouseY), random(60,120),
+                      random(30,60),random(0,4));
     
 }
 
