@@ -1,5 +1,14 @@
+/*
+Nghia Nguyen
+CPE 123 - Project 3
+There will be 3 places where we can click and see animation effect
+1 - the nose
+2 - eyes
+3 - mouth
+*/
+
 PImage me, liquid, turkey, smoke, hat, mustache, puff, brow_eye, nose, splash;
-boolean saliva, spindle_f, spindle_b, left_eye, right_eye, puff_out, original;
+boolean saliva, spindle_f, spindle_b, eyes, puff_out, original;
 boolean original_2, fill_but, running_nose;
 PVector[] liquid_dir;
 float[] liquid_x;
@@ -32,7 +41,7 @@ void setup()
     saliva = false;
     liquid_size = 20;
     puff_size = 100;
-    but_size = 20;
+    but_size = 50;
     liquid_x = new float[liquid_size];
     liquid_y = new float[liquid_size];
     liquid_dir = new PVector[liquid_size];
@@ -52,8 +61,7 @@ void setup()
     end = 0;
     spindle_f = true;
     spindle_b = false;
-    left_eye = false;
-    right_eye = false;
+    eyes = false;
     puff_out = true;
     original = true;
     original_2 = true;
@@ -105,10 +113,10 @@ void draw()
       if(splash_y>=470 || splash_y <= height/2)
        draw_mustache();
      //hat
-    // draw_hat();
+     draw_hat();
      //mouth
      saliva_turkey();
-     if(left_eye || right_eye)
+     if(eyes)
      {
           fill_but = false;
           crazy_eye();
@@ -123,7 +131,7 @@ void draw()
        if(puff_out)
          flying_puff();
       }
-    
+    //save("Project3.png");
 }
 
 void draw_nose(float cx, float cy, float size)
@@ -160,15 +168,9 @@ void flying_but()
           but_dir[i].mult(random(.4,.7));
           but_x[i] += but_dir[i].x;
           but_y[i] += but_dir[i].y;
-          
-          
-        /*  if(but_x[i] <= 20 || but_x[i]>=width-20)
-              but_dir[i].x = - but_dir[i].x;
-          if(but_y[i] <= .4*height || but_y[i] >= .6*height)
-              but_dir[i].y = - but_dir[i].y;
-          */    
+              
         float ang = atan2(but_dir[i].y, but_dir[i].x);          
-        butterfly(but_x[i], but_y[i], but_c[i], random(3,4), ang);
+        butterfly(but_x[i], but_y[i], but_c[i], random(2,3), ang);
     }
 }
 void butterfly(float cx, float cy, color c, float rad, float rot)
@@ -226,7 +228,7 @@ void draw_hat()
     {
         for(int y=0; y<hat.height; y++)
         {
-            loc_screen = x +120 + (y+20)*width;
+            loc_screen = x +200 + (y+50)*width;
             if(hat.pixels[x+y*hat.width] != color(255))
                 pixels[loc_screen] = hat.pixels[x + y*hat.width];
         }
@@ -284,32 +286,24 @@ void draw_me()
          for(int y=0; y<height; y++)
          {
              loc = x + y*width;
-             if(impl_eli(290,400,x,y,mouth_x, mouth_y) < 0 && x%2==0)
+             if(impl_eli(290,400,x,y,mouth_x, mouth_y) < 0 && x%2 == 0 )
                  pixels[loc] = color(brightness(me.pixels[loc]) + random(-20,0));     
-           /* else if(x>0 && x<150 && y>50 && y<120 && y%2==0)
-                 pixels[loc] = color(brightness(me.pixels[loc]) + random(-20,0));
-            else if(x>0 && x<150 && y>50 && y<120)
-                 pixels[loc] = color(#A2E576, 128);
-            else if(x>150 &&x < 250 && y<50 && x%2 == 0)
-                 pixels[loc] = color(brightness(me.pixels[loc]) + random(-20,0));
-            else if(impl_eli(300,50,x,y, 200,50) < 0 && x%2==0)
-                  pixels[loc] = color(brightness(me.pixels[loc]) + random(-20,0));*/
             else if((impl_cir(220, 250,x,y,50) < 0 || impl_cir(370,250,x,y,50) < 0)
-                 && x%2 ==0)
+                      &&  brightness(me.pixels[loc]) <128)
                    pixels[loc] = color(brightness(me.pixels[loc]) + random(-20,0));
-            else if(impl_cir(220, 250,x,y,50) < 0 || impl_cir(370,250,x,y,50) < 0)
-                   pixels[loc] = color(#EAEA2F,128);  
+            else if(eyes && (impl_cir(220, 250,x,y,50) < 0 || impl_cir(370,250,x,y,50) < 0))
+                   pixels[loc] = color(#939574,128);  
             else if((impl_line(0,100,100,0,x,y) > 0 ||
                      impl_line(500,0,600,100,x,y) > 0 ||
                      impl_line(0,500,100,600,x,y) < 0 ||
                      impl_line(500,600,600,500,x,y) < 0 )
-                    && y%2==0)
+                     && brightness(me.pixels[loc]) > 200)
                   pixels[loc] = color(brightness(me.pixels[loc]) + random(-20,0));
              else if(impl_line(0,100,100,0,x,y) > 0 ||
                      impl_line(500,0,600,100,x,y) > 0 ||
                      impl_line(0,500,100,600,x,y) < 0 ||
                      impl_line(500,600,600,500,x,y) < 0 )
-                 pixels[loc] = color(#96C9C5,128);
+                 pixels[loc] = color(#939574,128);
             else
                  pixels[loc] = color(#5FDB9A, 128);    
          }
@@ -480,28 +474,6 @@ void mousePressed()
         else saliva = false;
          
     }
-   /* if(impl_cir(220,250,mouseX,mouseY, 50) < 0)
-    {
-      for(int i=0; i<but_size; i++)
-       {    
-           if(i<but_size/2)
-           {
-              but_x[i] = 220;
-              but_y[i] = 250;
-           }
-           else
-           {
-               but_x[i] = 370;
-               but_y[i] = 250;
-           }
-            but_dir[i] = new PVector(random(-1,1), random(-1,1));
-            but_c[i] = color(random(255), random(255), random(255));
-       }
-        if(!left_eye)
-            left_eye = true;
-        else
-          left_eye = false;
-    }*/
     
     if(impl_cir(370,250, mouseX, mouseY, 50) < 0 
         || impl_cir(220,250,mouseX,mouseY, 50) < 0)
@@ -521,10 +493,10 @@ void mousePressed()
             but_dir[i] = new PVector(random(-1,1), random(-1,1));
             but_c[i] = color(random(255), random(255), random(255));
        }
-        if(!right_eye)
-            right_eye = true;
+        if(!eyes)
+            eyes = true;
         else
-          right_eye = false;
+          eyes = false;
     }
     if(impl_cir(170,430,mouseX, mouseY,65) < 0)
     {
