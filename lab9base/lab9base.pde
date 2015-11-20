@@ -1,3 +1,7 @@
+/*
+Nghia Nguyen
+CPE 123 - Lab 9: Firework
+*/
 // Base particle code for CSC 123 Lab 9
 
 // TODO_1: add a new particle constructor that will take in a starting color for a particle
@@ -56,31 +60,37 @@ class Particle
       origin_life = life;
    }
    // what to do each frame
-   void run(boolean shape) 
+   void run(float choice) 
    {
     
-      updateP(shape);
-      renderP(); // render is a fancy word for draw.  :)
+      updateP(choice);
+      renderP(choice); // render is a fancy word for draw.  :)
    }
     
    // a function to update the particle each frame
-   void updateP(boolean shape) 
+   void updateP(float choice) 
    {
-      if(shape && (life %2 == 0 || life <= .85*origin_life))
+      if(choice > 1 && choice <= 4 && (life %2 == 0 || life <= .85*origin_life))
       { 
         vel.add(accel);     
         loc.add(vel);
       }
-      if(!shape)
+      if(choice <= 1)
       {
           vel.add(accel);     
           loc.add(vel);
       }
-      life -= 1.0;
+      if(choice == 6 && life <=.9*origin_life)
+      {
+          vel.add(accel);     
+          loc.add(vel);
+      }
+      if(choice != 5)
+          life -= 1.0;
    }
     
    // how to draw a particle
-   void renderP() 
+   void renderP(float choice) 
    {
       pushMatrix();
        stroke(pcolor);
@@ -88,9 +98,9 @@ class Particle
        translate(loc.x, loc.y);
        //make the ellispe rotate with gravity
        rotate(vel.heading2D());
-       if(life < 25.0)
+       if(life < 25.0 || (life <.8*origin_life && choice == 6))
            pcolor = color(random(255), random(255), random(255));
-       if(life > 25)
+       if(life > 25 || choice == 6)
            ellipse(0, 0, r*vel.mag(),r*sin(life/100));
        else
            ellipse(0, 0, r*cos(life),r*sin(life/100)+PI/6);
@@ -115,6 +125,7 @@ class PSys
    color shade; // their main color
    float explode; //store the y-location of the bullet
    float choice;
+   float delay;
    // constructor
    PSys(int num, PVector init_loc) 
    {
@@ -135,14 +146,14 @@ class PSys
       source = init_loc.get();  // you have to do this to set a vector equal to another vector
       shade = color(random(255), random(255), random(255));  // TODO_2 use this!
       float t = PI/20;
-      PVector cir = new PVector();
+      PVector cir = source.get();
+      //use for letter
+      int h=0;
       if(choice >= 2)
           rad = random(2,3);
-      //else if(choice > 2)
-      //    rad = 15;
       for (int i=0; i < num; i++) 
       {
-        
+        //normal firework
          if(choice <= 1)
              particles.add(new Particle(source, shade, l_span));
          //smiley face firework
@@ -152,20 +163,17 @@ class PSys
              {
                  cir.x = source.x + rad*cos(t);
                  cir.y = source.y + rad*sin(t);
-                // particles.add(new Particle(cir, shade, l_span));
                  t += PI/20;
              }   
              else if(i<num*.75)
              {
                  cir.x = source.x+rad/2;
                  cir.y = source.y;
-                // particles.add(new Particle(cir, shade, l_span));
              }
              else
              {
                  cir.x = source.x-rad/2;
                  cir.y = source.y;
-                 //particles.add(new Particle(cir, shade, l_span));
              }
              particles.add(new Particle(cir, shade, l_span));
          }
@@ -178,19 +186,181 @@ class PSys
              rad -= .01;
              particles.add(new Particle(cir, shade, l_span));
          }
-         else
+         //butterfly
+         else if(choice <= 4)
          {
              cir.x = source.x + 20*(sin(t))*(pow(e,cos(t)) - 2*cos(4*t) - pow(sin(t/12),5));
              cir.y = source.y - 20*(cos(t))*(pow(e,cos(t)) - 2*cos(4*t) - pow(sin(t/12),5));
              t += PI/30;
              particles.add(new Particle(cir, shade, l_span));
-         }
-         
-         
+         }   
       }
       explode = height;
    }
    
+   PSys(int num, PVector init_loc, float l_span, float delay, int letter)
+   {
+      particles = new ArrayList();
+      source = init_loc.get();  // you have to do this to set a vector equal to another vector
+      shade = color(random(255), random(255), random(255));  // TODO_2 use this!
+      PVector cir = source.get();
+      this.delay = delay;
+      int h=0;
+      
+      choice = 5;
+
+      float t=0;
+      for (int i=0; i < num; i++) 
+      {
+          //letter H = 1
+          if(letter == 1)
+          {
+            //bar
+            cir.x = source.x - 24 + h;
+            cir.y = source.y;
+            particles.add(new Particle(cir, shade, l_span));
+           
+            //left 
+            cir.x = source.x-20;
+            cir.y = source.y + h;
+            particles.add(new Particle(cir, shade, l_span));
+            cir.y = source.y - h;
+            particles.add(new Particle(cir, shade, l_span));
+            //right
+            cir.x = source.x+20;
+            cir.y = source.y + h;
+            particles.add(new Particle(cir, shade, l_span));
+            cir.y = source.y - h;
+            particles.add(new Particle(cir, shade, l_span));
+    
+           // particles.add(new Particle(cir, shade, l_span));
+          }
+          //Letter A = 2
+          if(letter == 2)
+          {
+            //bar
+            if(i<.6*num)
+            {  
+                cir.x = source.x - 24 + h;
+                cir.y = source.y+20;
+                particles.add(new Particle(cir, shade, l_span));
+            }  
+            //left
+            cir.y = source.y - 30 + h;
+            cir.x = source.x + h/2.5;
+            particles.add(new Particle(cir, shade, l_span));
+            
+            //right
+            cir.y = source.y - 30 + h;
+            cir.x = source.x - h/2.5;
+            particles.add(new Particle(cir, shade, l_span));
+            
+          }
+          //letter P == 3
+          else if(letter == 3)
+          {
+              cir.x = source.x-20;
+              cir.y = source.y + h;
+              particles.add(new Particle(cir, shade, l_span));
+              cir.y = source.y - h;
+              particles.add(new Particle(cir, shade, l_span));
+              cir.x = source.x + 20*cos(t);
+              cir.y = source.y - 20 + 25*sin(t);
+              particles.add(new Particle(cir, shade, l_span));
+              t += PI/10;
+              
+          }
+          //letter Y == 4
+          else if(letter == 4)
+          {
+              cir.x = source.x;
+              cir.y = source.y + h;
+              particles.add(new Particle(cir, shade, l_span));
+              cir.x = source.x-20+h/2.5;
+              cir.y = source.y- 40 + h;
+              particles.add(new Particle(cir, shade, l_span));
+              cir.x = source.x+20-h/2.5;
+              particles.add(new Particle(cir, shade, l_span));
+             
+          }
+          //letter N == 5
+          else if(letter == 5)
+          {
+              cir.x = source.x-25;
+              cir.y = source.y + h;
+              particles.add(new Particle(cir, shade, l_span));
+              cir.y = source.y - h;
+              particles.add(new Particle(cir, shade, l_span));
+              cir.x = source.x+25;
+              cir.y = source.y + h;
+              particles.add(new Particle(cir, shade, l_span));
+              cir.y = source.y - h;
+              particles.add(new Particle(cir, shade, l_span));
+              cir.x = source.x -25 + h;
+              cir.y = source.y - 50 + 2*h;
+              particles.add(new Particle(cir, shade, l_span));
+              
+          }
+          //letter E == 6
+          else if(letter == 6)
+          {
+              cir.x = source.x-25;
+              cir.y = source.y + h;
+              particles.add(new Particle(cir, shade, l_span));
+              cir.y = source.y - h;
+              particles.add(new Particle(cir, shade, l_span));
+              cir.x = source.x - 25 + h;
+              cir.y = source.y - 50;
+              particles.add(new Particle(cir, shade, l_span));
+              cir.x = source.x - 25 + h;
+              cir.y = source.y;
+              particles.add(new Particle(cir, shade, l_span));
+              cir.x = source.x - 25 + h;
+              cir.y = source.y + 50;
+              particles.add(new Particle(cir, shade, l_span));
+              
+          }
+          //letter W == 7
+          else if(letter == 7)
+          {
+              cir.x = source.x - 25 + h/2;
+              cir.y = source.y - 50 + 2*h;
+              particles.add(new Particle(cir, shade, l_span));
+              cir.x = source.x + 25 - h/2;
+              cir.y = source.y - 50 + 2*h;
+              particles.add(new Particle(cir, shade, l_span));
+              cir.x = source.x + 25 + h/2;
+              cir.y = source.y - 50 + 2*h;
+              particles.add(new Particle(cir, shade, l_span));
+              cir.x = source.x + 75 - h/2;
+              cir.y = source.y - 50 + 2*h;
+              particles.add(new Particle(cir, shade, l_span));
+              
+          }
+          
+          //letter R == 8
+          else if(letter == 8)
+          {
+            //letter P
+              cir.x = source.x-20;
+              cir.y = source.y + h;
+              particles.add(new Particle(cir, shade, l_span));
+              cir.y = source.y - h;
+              particles.add(new Particle(cir, shade, l_span));
+              cir.x = source.x + 20*cos(t);
+              cir.y = source.y - 20 + 25*sin(t);
+              particles.add(new Particle(cir, shade, l_span));
+              t += PI/10;
+            //make  R from P
+              cir.x = source.x-20 + h;
+              cir.y = source.y + h;
+              particles.add(new Particle(cir, shade, l_span));
+              
+          }
+          h+=2;
+      }
+       explode = height;
+   }
    //bullet was fired from below, and when it reachs a certain height
    //it will explode
    void bullet()
@@ -210,7 +380,8 @@ class PSys
       {
          Particle p = (Particle)particles.get(i);
          
-        
+         if(delay-- > 0)
+             return;
          // update each particle per frame
          if(explode > source.y)
          {
@@ -218,7 +389,7 @@ class PSys
              explode-=.2;
          }
          else
-             p.run(choice>1.0);
+             p.run(choice);
          if (!p.alive()) // what is that '!' thingy??
             particles.remove(i);
             
@@ -233,12 +404,18 @@ class PSys
    {
       return particles.isEmpty();
    }
+   
+   void changeChoice(float newChoice)
+   {
+       this.choice = newChoice;
+   }
 }
 
 // declare a particle system
 PSys[] fireW1;
 int num_fire_work;
-PSys fireW2;
+PSys[] fireW2;
+int countF=0, i=0;
 void setup() 
 {
    size(500, 500);
@@ -248,9 +425,10 @@ void setup()
    
    num_fire_work = 5;
    // start a new particle system
+   fireW2 = new PSys[15];
    fireW1 = new PSys[num_fire_work];
    for(int i=0; i<num_fire_work; i++)
-      fireW1[i] = new PSys(100, new PVector(random(20,width-20), random(height/2)),
+      fireW1[i] = new PSys(100, new PVector(random(20,width-20), random(40,height/2)),
                             random(60,120), random(30,50),random(0,4));
   
    
@@ -264,28 +442,79 @@ void draw()
 
    // run the particle system
     // TODO_4 add code to start a new particle system once the old one dies
-   for(int i=0; i<num_fire_work; i++)
+   if(!click)
    {
-     if(fireW1[i].dead())
-       fireW1[i] = new PSys(100, new PVector(random(20,width-20), random(height/2)), 
-                            random(60,120), random(30,60),random(0,4));
-     fireW1[i].run(); 
+       for(int i=0; i<num_fire_work; i++)
+       {
+         if(fireW1[i].dead())
+           fireW1[i] = new PSys(100, new PVector(random(20,width-20), random(40,height/2)), 
+                                random(60,120), random(30,60),random(0,4));
+         fireW1[i].run(); 
+       }
+   } 
+   if(click)
+   {
+     countF++;
+     for(i=0; i<12; i++)
+         fireW2[i].run();  
+    
+     if(countF > 80)
+     {
+         for(i=0; i<12; i++)
+           fireW2[i].choice = 6;
+     }
+     
+     if(fireW2[11].dead())
+          click = false;
+     
    }
    
-   if(click)
-      fireW2.run();
 }
 
 // TODO_3 add a mouse click function
 void mousePressed()
 {
+    countF = 0;
     click = true;
-    fireW2 = new PSys(100, new PVector(mouseX, mouseY), random(60,120),
-                      random(30,60),random(0,4));
-    
+    float life = 80;
+    fireW2[0] = new PSys(25, new PVector(80,100), life, //H
+                      0, 1);
+    fireW2[1] = new PSys(45, new PVector(150,90), life, //A
+                      5, 2); 
+    fireW2[2] = new PSys(25, new PVector(230,100), life, //P
+                      10, 3); 
+    fireW2[3] = new PSys(25, new PVector(300,100), life, //P
+                      15, 3);
+    fireW2[4] = new PSys(30, new PVector(370,100), life, //Y
+                      20, 4);
+    fireW2[5] = new PSys(25, new PVector(120,250), life, //N
+                      25, 5);
+    fireW2[6] = new PSys(25, new PVector(200,250), life, //E
+                      30, 6);
+    fireW2[7] = new PSys(25, new PVector(270,250), life, //W
+                      35, 7);
+    fireW2[8] = new PSys(30, new PVector(160,400), life, //Y
+                      40, 4);
+    fireW2[9] = new PSys(25, new PVector(240,400), life, //E
+                      45, 6);
+    fireW2[10] = new PSys(50, new PVector(320,390), life, //A
+                      50, 2);
+    fireW2[11] = new PSys(25, new PVector(400,400), life, //R
+                      55, 8);
+         
+     //reset fireW1
+     for(int i=0; i<num_fire_work; i++)
+          fireW1[i] = new PSys(100, new PVector(random(20,width-20), random(40,height/2)), 
+                                random(60,120), random(30,60),random(0,4));
+         
+       
 }
 
 float impl_cir(float cx, float cy, float x, float y, float rad)
 {
     return (pow(x-cx,2) + pow(y-cy,2) - rad*rad);
+}
+float impl_eli(float cx, float cy, float x, float y, float w, float h)
+{
+    return(pow(x-cx,2)/pow(w,2) + pow(y-cy,2)/pow(h,2) - 1);
 }
