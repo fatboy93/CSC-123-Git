@@ -1,0 +1,6 @@
+the Psys has 2 contrsuctor that takes 5 parameters
+-> confuse
+-> change 1 to take 4 and the other one take 5
+directly creat l_span =100 in the construtor with letter
+
+file is saved int the fixed for javascipt folder
