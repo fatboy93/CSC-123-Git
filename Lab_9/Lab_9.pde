@@ -49,13 +49,14 @@ class Particle
        origin_life = life;
    }
    
+   //constructor with life_span
      Particle(PVector start, color c, float l) 
    {
       accel = new PVector(0, 0.05); //gravity
       vel = new PVector(random(-1, 1), random(-2, 0), 0);
       pcolor = c;
       loc = start.get();  // make a COPY of the start location vector
-      r = 8.0;
+      r = 7.0;
       life = l;
       origin_life = life;
    }
@@ -70,21 +71,26 @@ class Particle
    // a function to update the particle each frame
    void updateP(float choice) 
    {
+     //parametric firework
       if(choice > 1 && choice <= 4 && (life %2 == 0 || life <= .85*origin_life))
       { 
         vel.add(accel);     
         loc.add(vel);
       }
+      //normal firework
       if(choice <= 1)
       {
           vel.add(accel);     
           loc.add(vel);
       }
-      if(choice == 6 && life <=.9*origin_life)
+      //happy new year firework
+      if(choice == 6 && life <=.8*origin_life)
       {
           vel.add(accel);     
           loc.add(vel);
       }
+      // do not thing - wating for all the letters to comes up
+      //change choice to 6 later on
       if(choice != 5)
           life -= 1.0;
    }
@@ -94,11 +100,11 @@ class Particle
    {
       pushMatrix();
        stroke(pcolor);
-       fill(pcolor, 70);
+       fill(pcolor, life);
        translate(loc.x, loc.y);
        //make the ellispe rotate with gravity
        rotate(vel.heading2D());
-       if(life < 25.0 || (life <.8*origin_life && choice == 6))
+       if(life < 25.0 || (life <.9*origin_life && choice == 6))
            pcolor = color(random(255), random(255), random(255));
        if(life > 25 || choice == 6)
            ellipse(0, 0, r*vel.mag(),r*sin(life/100));
@@ -207,6 +213,7 @@ class PSys
       this.delay = delay;
       int h=0;
       
+      //set choice to 5 so life will not decrease until all the letters show up
       choice = 5;
 
       float t=0;
@@ -380,6 +387,7 @@ class PSys
       {
          Particle p = (Particle)particles.get(i);
          
+         //delay the time it shot up
          if(delay-- > 0)
              return;
          // update each particle per frame
@@ -389,7 +397,7 @@ class PSys
              explode-=.2;
          }
          else
-             p.run(choice);
+             p.run(choice);  //passing choice for each particles to run approtiately 
          if (!p.alive()) // what is that '!' thingy??
             particles.remove(i);
             
@@ -403,11 +411,6 @@ class PSys
    boolean dead() 
    {
       return particles.isEmpty();
-   }
-   
-   void changeChoice(float newChoice)
-   {
-       this.choice = newChoice;
    }
 }
 
@@ -452,6 +455,8 @@ void draw()
          fireW1[i].run(); 
        }
    } 
+   
+   //draw happy new year
    if(click)
    {
      countF++;
@@ -460,10 +465,11 @@ void draw()
     
      if(countF > 80)
      {
+       //after all the letters show up - change choice to 6
          for(i=0; i<12; i++)
            fireW2[i].choice = 6;
      }
-     
+     //the last letter is dead - set click to false and go back to orignal firework
      if(fireW2[11].dead())
           click = false;
      
@@ -477,6 +483,7 @@ void mousePressed()
     countF = 0;
     click = true;
     float life = 80;
+    //Create each letter separately
     fireW2[0] = new PSys(25, new PVector(80,100), life, //H
                       0, 1);
     fireW2[1] = new PSys(45, new PVector(150,90), life, //A
@@ -503,18 +510,12 @@ void mousePressed()
                       55, 8);
          
      //reset fireW1
+     //change the num of firework to 15 - more firework after happy new year
+     num_fire_work = 10;
+     fireW1 = new PSys[num_fire_work];
      for(int i=0; i<num_fire_work; i++)
           fireW1[i] = new PSys(100, new PVector(random(20,width-20), random(40,height/2)), 
                                 random(60,120), random(30,60),random(0,4));
          
        
-}
-
-float impl_cir(float cx, float cy, float x, float y, float rad)
-{
-    return (pow(x-cx,2) + pow(y-cy,2) - rad*rad);
-}
-float impl_eli(float cx, float cy, float x, float y, float w, float h)
-{
-    return(pow(x-cx,2)/pow(w,2) + pow(y-cy,2)/pow(h,2) - 1);
 }
