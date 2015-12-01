@@ -8,25 +8,32 @@
 
 PVector Dloc;
 PVector dir;
-float neckR, wingR, speed, feet;
-
+float neckR, wingR, speed, feet, rot, scale_duck;
+PVector Jump, gravity;
+boolean jump = false;
+boolean jumpforw = true;
 boolean neckDown = true;
 boolean wingDown = false;
-boolean animateOn = false;
+boolean animateOn = true;
 boolean frontfeetFoward = true;
 boolean backfeetForward = false;
-  
+PImage flower;
 // normal set up
 void setup() 
 {
-  size(400, 400);
+  size(600, 600);
   smooth();
   neckR = 0;
   wingR =-.2;
   feet = .2;
-  Dloc = new PVector(width*.9, height/2);
+  Dloc = new PVector(width*.9, .7*height);
   dir = new PVector(-1, 0);
+  Jump = new PVector(0,-4);
+  gravity = new PVector(0, 0.02);
   speed = 0.5;
+  rot = 1;
+  flower = loadImage("flower.png");
+  scale_duck = 2;
 }
 
 // normal draw
@@ -36,22 +43,28 @@ void draw()
   
   // foreground
   fill(78, 155, 16);
-  rect(0, height/2, width, height/2);
+  rect(0, .7*height, width, height/2);
   
   drawDuck();
-  
+
   if (animateOn) 
   {
      animate();
   }
+  if(Dloc.x <= -50)
+      Dloc.x = .9*width;
   
 }
 
 // method to control starting the duck over again and control animation on and off
 void mousePressed() 
 {
-  Dloc.x = width*.9;
-  animateOn = !animateOn;
+ // Dloc.x = width*.9;
+   if(jump)
+       jumpforw = !jumpforw;
+  jump = true;
+
+  //animateOn = !animateOn;
 }
 
 // code to draw the duck with animation parameters neckR and wingR - other transforms align
@@ -62,7 +75,30 @@ void drawDuck()
     
     pushMatrix();
       translate(Dloc.x, Dloc.y); // move the entire duck
+      if(jump)
+      {  
+        if(jumpforw)
+            rotate(radians(rot+=3.6));
+        else 
+            rotate(radians(rot-=3.6));
+        if(Jump.y <=0)
+            scale(scale_duck -= .01);
+        else
+            scale(scale_duck += .01);
+      }
+      else
       scale(2); // scale the entire duck
+      //leg behind the body
+      pushMatrix();
+         translate(0,12);  //move into the draw position
+         rotate(-feet);  //control the angle
+         translate(2,5);  //move to the pivot point
+         fill(#F58C23);
+         ellipse(0,0,4, 15); //leg
+        // fill(#9B5F22);
+         triangle(1, 7.5, -4, 12, -4, 5 );
+         triangle(-4,10,-4,7,-7,7);
+      popMatrix();
       fill(245, 226, 12);
       ellipse(0, 0, 40, 30); // body
       
@@ -88,12 +124,16 @@ void drawDuck()
          ellipse(0, 0, 34, 20); // wing
       popMatrix();
       //drawing the legs
-      fill(#F58C23);
+      
       pushMatrix();
-         translate(0,10);  //move into the draw position
-         rotate(feet);
-         translate(0,5);
-         ellipse(0,0,4, 10);
+         translate(0,12);  //move into the draw position
+         rotate(feet);  //control the angle
+         translate(0,5);  //move to the pivot point
+         fill(#F58C23);
+         ellipse(0,0,4, 15); //leg
+        // fill(#9B5F22);
+         triangle(1, 7.5, -4, 12, -4, 5 );
+         triangle(-4,10,-4,7,-7,7);
       popMatrix();
       
     popMatrix();          
@@ -105,17 +145,29 @@ void animate()
   // update the duck's global location
   Dloc.x = Dloc.x + dir.x*speed;
   Dloc.y = Dloc.y + dir.y*speed;
-  
+  if(jump && Dloc.y <= .7*height)
+  {
+    Dloc.y += Jump.y;
+    Jump.y += gravity.y; 
+  }
+  else
+  {
+    Dloc.y = .7*height;
+    jump = false;
+    jumpforw = !jumpforw;
+    Jump = new PVector(0,-4);
+    gravity = new PVector(0, 0.02);
+  }
   //feet
   if(feet < -.5)
-      frontfeetFoward = false;
-  else if(feet > .5)
       frontfeetFoward = true;
+  else if(feet > .5)
+      frontfeetFoward = false;
   
   if(frontfeetFoward)
-      feet += .03;
+      feet += .02;
   else
-      feet -=.03;
+      feet -=.02;
   // find out how much the neck is rotated to decide which way to rotate
   // these constrain how much the neck moves up and down
   if (neckR < -1) 
@@ -150,10 +202,16 @@ void animate()
  
   if (wingDown) 
   {
-     wingR += .03; 
+    if(jump)
+      wingR += .2;
+     else
+      wingR += .03; 
   } 
   else 
   {
+    if(jump)
+      wingR -= .2;
+    else
      wingR -= .03;
   }
 }

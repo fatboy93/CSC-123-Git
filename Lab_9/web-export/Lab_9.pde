@@ -367,51 +367,8 @@ class PSys
           //letter C
           else if(letter == 9) 
           {
-              cir.x = source.x + 20 + 50*cos(t-PI/2.5);
-              cir.y = source.y +10 + 50*sin(t-PI/2.5);
-              t -= PI/18;
-              particles.add(new Particle(cir, shade, l_span));
-          }
-          //letter O
-          else if(letter == 10)
-          {
-              cir.x = source.x + 20 + 35*cos(t-PI/2.5);
-              cir.y = source.y +10 + 50*sin(t-PI/2.5);
-              t -= PI/random(8,12);
-              particles.add(new Particle(cir, shade, l_span));
-          }
-          //letter G
-          else if(letter == 11)
-          {
-              cir.x = source.x + 20 + 35*cos(t-PI/2.5);
-              cir.y = source.y +10 + 50*sin(t-PI/2.5);
-              t -= PI/18;
-              particles.add(new Particle(cir, shade, l_span));
-              cir.x = source.x+40;
-              cir.y = source.y + 10 + h/1.3;
-              particles.add(new Particle(cir, shade, l_span));
-              cir.x = source.x + 20 + h/1.2;
-              cir.y = source.y + 10;
-              particles.add(new Particle(cir, shade, l_span));
-          }
-          //letter T
-          else if(letter == 12)
-          {
-              cir.x = source.x - 30 + h*1.5;
-              cir.y = source.y - 35;
-              particles.add(new Particle(cir, shade, l_span));
-              cir.x = source.x + 10;
-              cir.y = source.y - 35 + h*2;
-              particles.add(new Particle(cir, shade, l_span));
-          }
-          //letter L
-          else if(letter == 13)
-          {
-              cir.x = source.x;
-              cir.y = source.y - 40 + h*2;
-              particles.add(new Particle(cir, shade, l_span));  
-              cir.x = source.x + h;
-              cir.y = source.y +55;
+              cir.x = source.x + 20*cos(t);
+              cir.y = source.y - 20 + 25*sin(t);
               particles.add(new Particle(cir, shade, l_span));
           }
           h+=2;
@@ -557,7 +514,7 @@ void mousePressed()
     fireW2[10] = new PSys(50, new PVector(320,390), life, //A
                       50, 2);
     fireW2[11] = new PSys(25, new PVector(400,400), life, //R
-                      55, 13);
+                      55, 9);
          
      //reset fireW1
      //change the num of firework to 15 - more firework after happy new year
