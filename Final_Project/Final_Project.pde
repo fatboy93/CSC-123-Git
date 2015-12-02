@@ -367,7 +367,7 @@ class PSys
           //letter C
           else if(letter == 9) 
           {
-              cir.x = source.x + 20 + 50*cos(t-PI/2.5);
+              cir.x = source.x + 20 + 35*cos(t-PI/2.5);
               cir.y = source.y +10 + 50*sin(t-PI/2.5);
               t -= PI/18;
               particles.add(new Particle(cir, shade, l_span));
@@ -427,6 +427,19 @@ class PSys
               cir.y = source.y + 55;
               particles.add(new Particle(cir, shade, l_span));
           }
+          //letter I
+          else if(letter == 15)
+          {
+              cir.x = source.x-25 + h;
+              cir.y = source.y-35;
+              particles.add(new Particle(cir, shade, l_span));
+              cir.x = source.x-25 + h;
+              cir.y = source.y+55;
+              particles.add(new Particle(cir, shade, l_span));
+              cir.x = source.x;
+              cir.y = source.y - 40 + h*2;
+              particles.add(new Particle(cir, shade, l_span));
+          }
           h+=2;
       }
        explode = height;
@@ -484,7 +497,7 @@ PSys[] fireW2;
 int countF=0, i=0;
 void setup() 
 {
-   size(500, 500);
+   size(1000, 500);
    
    // range for the alpha is 0-100
    colorMode(RGB, 255, 255, 255, 100);
@@ -523,17 +536,17 @@ void draw()
    if(click)
    {
      countF++;
-     for(i=0; i<12; i++)
+     for(i=0; i<14; i++)
          fireW2[i].run();  
     
      if(countF > 80)
      {
        //after all the letters show up - change choice to 6
-         for(i=0; i<12; i++)
+         for(i=0; i<14; i++)
            fireW2[i].choice = 6;
      }
      //the last letter is dead - set click to false and go back to orignal firework
-     if(fireW2[11].dead())
+     if(fireW2[13].dead())
           click = false;
      
    }
@@ -547,30 +560,34 @@ void mousePressed()
     click = true;
     float life = 80;
     //Create each letter separately
-    fireW2[0] = new PSys(25, new PVector(80,100), life, //H
-                      0, 1);
-    fireW2[1] = new PSys(45, new PVector(150,90), life, //A
-                      5, 2); 
-    fireW2[2] = new PSys(25, new PVector(230,100), life, //P
-                      10, 3); 
-    fireW2[3] = new PSys(25, new PVector(300,100), life, //P
-                      15, 3);
-    fireW2[4] = new PSys(30, new PVector(370,100), life, //Y
-                      20, 4);
-    fireW2[5] = new PSys(25, new PVector(120,250), life, //N
-                      25, 5);
-    fireW2[6] = new PSys(25, new PVector(200,250), life, //E
-                      30, 6);
-    fireW2[7] = new PSys(25, new PVector(270,250), life, //W
-                      35, 7);
-    fireW2[8] = new PSys(30, new PVector(160,400), life, //Y
-                      40, 4);
-    fireW2[9] = new PSys(25, new PVector(240,400), life, //E
-                      45, 6);
-    fireW2[10] = new PSys(50, new PVector(320,390), life, //A
-                      50, 2);
-    fireW2[11] = new PSys(25, new PVector(400,400), life, //R
-                      55, 8);
+    fireW2[0] = new PSys(25, new PVector(40,100), life, //C
+                      0, 9);
+    fireW2[1] = new PSys(45, new PVector(100,90), life, //O
+                      20, 10); 
+    fireW2[2] = new PSys(25, new PVector(190,100), life, //N
+                      20, 5); 
+    fireW2[3] = new PSys(25, new PVector(240,100), life, //G
+                      20, 11);
+    fireW2[4] = new PSys(30, new PVector(330,100), life, //R
+                      20, 8);
+    fireW2[5] = new PSys(45, new PVector(400,90), life, //A
+                      20, 2);
+    fireW2[6] = new PSys(25, new PVector(470,100), life, //T
+                      20, 12);
+    fireW2[7] = new PSys(25, new PVector(540,100), life, //U
+                      20, 14);
+    fireW2[8] = new PSys(25, new PVector(580,100), life, //L
+                      20, 13);
+    fireW2[9] = new PSys(45, new PVector(660,100), life, //A
+                      20, 2);
+    fireW2[10] = new PSys(25, new PVector(720,100), life, //T
+                      20, 12);
+    fireW2[11] = new PSys(25, new PVector(800,100), life, //I
+                      20, 15);
+    fireW2[12] = new PSys(45, new PVector(850,100), life, //O
+                      20, 10);
+    fireW2[13] = new PSys(25, new PVector(940,100), life, //N
+                      20, 5);                  
          
      //reset fireW1
      //change the num of firework to 15 - more firework after happy new year
