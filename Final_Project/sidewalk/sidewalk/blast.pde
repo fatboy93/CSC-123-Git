@@ -21,22 +21,19 @@ visualBlast();
 
 */
 
-void move() {
-  if(moving==false && x_b < 1500)
-      x_b = x_b + speed_b*2.5*gun_heading.x;
-      println(y_b);
-  }
+
   
 
 void visualBlast(){
   
     pushMatrix();
+      translate(x_b, y_b);
       rotate(gun_heading.heading());
       smooth();
       noStroke();
       fill(255,0,0);
-      ellipse(x_b,y_b,75,15);
+      ellipse(0,0,75,15);
       fill(255);
-      ellipse(x_b,y_b,50,10);
+      ellipse(0,0,50,10);
     popMatrix();
 }

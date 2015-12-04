@@ -6,20 +6,6 @@ int lives = 3;
 int points = 0;
 PVector Blaster;
 PImage gun;
-String str = 
-
-"The carnival just came into town.\n             \nYou attended expecting the time of your life.\n           \nThe clowns, however,held a different\nmeaning for the word “fun”.\n             \nAs it turns out, these clowns\nweren’t just clowns…\n             \nthey were flesh-eating cannibalistic\npsycho ghost demon clowns.\n            \nYou being the stone-cold\nbadass that you are,\n          \ndecide you don’t have time for this and\nintend to make it home before dinner.\n             \nWhat’s for dinner?\n          \n            \n            \n Justice. "; // our text to display
-
-
-
-
-
-
-
-
-
-
-
 PFont font; // our font variable
 int x, y; // current position of the text
 float x0, y0, x1, y1;
@@ -31,23 +17,52 @@ int num_clowns;
 int Y_AXIS = 1;
 int X_AXIS = 2;
 color  c1, c2;
-
+boolean restart = false;
 int cloud_size;
 boolean  original = true;
+boolean won = false;
 AI [] Clown;
 
 float[] cloud_x;
 float[] cloud_y;
 float[] cloud_s;
 PVector[] cloud_dir;
-
 int flicker;
 boolean boy_is_dead = false;
-
 PImage  gun_pointer;
-
 boolean hit_clown = false;
+String [] str;
+float [] text_loc;
+int text_line;
+int winning_point;
+kid thekids[];
+int numC;
 void setup(){
+  
+  //text
+  text_line = 12;
+   text_loc = new float[ text_line];
+    for(int i=0; i< text_line; i++)
+    {
+        text_loc[i] = height + (i+1)*70;
+        //text_size[i] = 32;
+    }
+    str = new String[text_line];
+    str[0] = "The carnival just came into town.";
+    str[1] = "You attended expecting the time of your life.";
+    str[2] = "The clowns, however, held a different meaning for the word “fun”";
+    str[3] = "As it turns out, these clowns weren’t just clowns…";
+    str[4] = "they were flesh-eating cannibalistic psycho ghost demon clowns.";
+    str[5] = "You being the stone-cold badass that you are,";
+    str[6] = "decide you don’t have time for this";
+    str[7] = "and intend to make it home before dinner.";
+    str[8] = "What’s for dinner?";
+    str[9] = "";
+    str[10] = "";
+    str[11] = "Justice.";
+    textSize(30);
+    textAlign(CENTER);
+    
   Blaster = new PVector(0,0);
   gun_pointer = loadImage("gun_pointer.png");
 cloud_size = 50;
@@ -98,7 +113,7 @@ cloud_size = 50;
     mR = new PVector(1,0);
     Jump = new PVector(0, -8);
     Gravity = new PVector(0, .2);
-
+    winning_point = 10;
     speed = 0.5;
     gun_heading = new PVector(0,0);
     //sound
@@ -115,41 +130,39 @@ cloud_size = 50;
   x = width/2;
   y = 1100;
  
-  // set the font  
+  // set the font 
   textFont(font);
+  
+  //vanishing kid
+  smooth();
+  numC = 1;
+  thekids = new kid[numC];
+  
+  for (int i=0; i < numC; i++) {
+    //thekids[i] = new kid(new PVector(-20, height+20), new PVector(width*.8, height/2), i*40+ (int)random(5, 20));
+    thekids[i] = new kid(new PVector(-20, height+20), new PVector(width/2 + 60, height/2), i*40+ (int)random(5, 20));
+  }
 }
 void draw(){
  
-  if(frameCount > 1111500)
+  if(frameCount <= 2000)
   {
     background(0);
-            //text
-       
-      // set the fill for the text
-      fill(241, 255, 54);
-     
-       /*
-      // If the head of the text has started to go off screen,
-      // draw a second copy behind it by 50 pixels
-      if (x < 0) {
-     
-        text(str, x + textWidth(str) + 50, y);
+    //text
+    for(int i=0; i<text_line; i++)
+    {
+      if(text_loc[i] > -10)
+      {
+         if(i < 11)
+            textSize(32 * (text_loc[i]+20)/ height);
+         else
+            textSize(100 * (text_loc[i]+20)/height);
+         text(str[i], width/2, text_loc[i]);
       }
-     
-      // if the first copy of the text is completely offscreen, set x to be
-      // at the current location of the second copy
-      if (x <= -textWidth(str)) {
-        x = x + (int)textWidth(str) + 50;
-      }*/
-     
-      // Draw the text
-      text(str, x, y);
-      textAlign(CENTER, CENTER);
-      // move the position one to the left
-      //x--;
-      y--;
+      text_loc[i]-=.65;
+    }
   }
-  else
+  else if(!won)
   {
     background(50);
     fill(100);
@@ -169,31 +182,55 @@ void draw(){
         curX = x0 + t*(x1-x0);
         curY = y0 + t*(y1-y0);
         SWK(curX, curY);
-  }
-/*
-flickerer();
-pushMatrix();
-for (float t=-4; t< 1; t=t+.017) {
-  fill(200,200,200,flicker);
-  stroke(0);
-  curX = x0 + t*(x1-x0);
-  curY = y0 + t*(y1-y0);
-  SWK(curX, curY);
-}
-popMatrix();
-*/
+    }
+    /*
+    flickerer();
+    pushMatrix();
+    for (float t=-4; t< 1; t=t+.017) {
+      fill(200,200,200,flicker);
+      stroke(0);
+      curX = x0 + t*(x1-x0);
+      curY = y0 + t*(y1-y0);
+      SWK(curX, curY);
+    }
+    popMatrix();
+    */
 
     //kid
     drawKid();
     moveR();
     pushMatrix();
     //clown
-    for(int i=0; i<num_clowns; i++)
+    if(restart)
     {
-       Clown[i].drawC();
-       Clown[i].AIfollow(Kloc.x, Kloc.y);
-       if(Clown[i].dead)
-           Clown[i] = new AI(width + 200, random(50, height-100));
+      for(int i=0; i<num_clowns; i++)
+         Clown[i] = new AI(width + i*200, random(50, height-100));   
+      restart = false;
+    }
+    else
+    {
+        for(int i=0; i<num_clowns && !restart && !won; i++)
+        {
+             Clown[i].drawC();
+             Clown[i].AIfollow(Kloc.x, Kloc.y);
+           
+             //shoot the clowns
+             if(impl_eli(x_b, y_b, Clown[i].clownX, Clown[i].clownY,40,50) <= 0)
+              {
+                 Clown[i] = new AI(width + random(0,1000), random(50, height-100));
+                 points++;
+                 shoot = false;
+                 x_b = 0;
+                 if(points >= winning_point)
+                     won = true;
+              }
+              //check if clown eat the boy
+              if(impl_circle(Clown[i].clownX, Clown[i].clownY, Kloc.x, Kloc.y, 40)<=0)
+              {
+                 lives--;
+                 restart = true; 
+              }
+        }
     }
     popMatrix();
     //lives ann points
@@ -203,23 +240,17 @@ popMatrix();
         hit_clown = false;
     }
     
-    if(boy_is_dead)
-    {
-        lives--;
-        boy_is_dead = false;
-        if(lives == 0)
-            //dead -> show scene;
-            ;
-            
-    }
-    float lx = 50, ly = height -30;
+  
+    float lx = 120, ly = height -30;
     fill(255);
-    text("Points: ",  width-200, ly);
+    textSize(25);
+    text("Points:  " + points,  width-200, ly);
+    
     text("Lives: ",lx, ly);
-    for(int i=0;  i<lives; i++)
+    for(int i=0; i<lives; i++)
     {  
         lx+= 30;
-        draw_heart(lx + 90,ly-12);
+        draw_heart(lx + 20,ly-12);
     }
     
     //gun_pointer
@@ -230,10 +261,21 @@ popMatrix();
       
    popMatrix();
     //blaster
-         move();
-       if(shoot)
+    if(shoot)
+    {
+       if(x_b <= 950)
+       {
+          x_b = x_b + speed_b*3*gun_heading.x;
+          y_b = y_b + speed_b*3*gun_heading.y;
+       }
+       else
+          shoot = false;
        visualBlast();
-   
+    }
+  }
+  else
+  {
+      draw_vanishing_kid();
   }
 }
 
@@ -320,19 +362,46 @@ void flickerer()
   }
 }
   
+
 void mousePressed()
 {
-   gun_heading = new PVector(mouseX-Kloc.x, mouseY-Kloc.y); 
-   gun_heading.normalize();
-   shoot = true;
-   x_b = Kloc.x;
-   y_b = Kloc.y;
-   gunshot.play();
-   gunshot.rewind();
+   if(!won && frameCount >2000)
+   {
+       gun_heading = new PVector(mouseX-Kloc.x, mouseY-Kloc.y); 
+       gun_heading.normalize();
+       shoot = true;
+       x_b = Kloc.x + 70*gun_heading.x;
+       y_b = Kloc.y -30 + 70*gun_heading.y;
+       gunshot.play();
+       gunshot.rewind();
+   }
+   //kid getting home
+    PVector end;
+  
+    end = new PVector(width/2 + 60, height/2);
+    //end = new PVector(.8*width, height/2);
+    //reset all the kids
+     for (int i=0; i < numC; i++) 
+     {
+         thekids[i].loc.x = -20;
+         thekids[i].loc.y = height+20;
+         thekids[i].alive = true;
+         thekids[i].time = 0;
+      }   
 }
 void mouseClicked()
 {
   
+}
+
+float impl_circle(float cx, float cy, float x1, float y1, float rad)
+{
+    return pow(cx-x1,2) + pow(cy-y1,2) - pow(rad,2);
+}
+
+float impl_eli(float cx, float cy, float x1, float y1, float w, float h)
+{
+    return pow(cx-x1,2)/(w*w) + pow(cy-y1,2)/(h*h) - 1; 
 }
 void draw_heart(float cx, float cy)
 {

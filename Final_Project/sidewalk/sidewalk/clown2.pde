@@ -71,7 +71,8 @@ class AI {
   //ellipse(clownX, clownY,10,10);
   fill(255,0,200,50);
   //rect(clownX-100, clownY-100,200,200);
-  image(clown_1,clownX-57,clownY-40);
+  imageMode(CENTER);
+  image(clown_1,clownX,clownY);
  // AIfollow();
   c_anim();
  
@@ -82,9 +83,9 @@ class AI {
 void c_anim(){
   //float animator;
  // animator = 255;
-    pushMatrix();
-  tint(255,transperency);
-  image(clown_2,clownX-57,clownY-40);
+  pushMatrix();
+      tint(255,transperency);
+      image(clown_2,clownX,clownY);
   popMatrix();
 
   if(following){
@@ -114,8 +115,6 @@ void AIfollow(float kid_x, float kid_y){
       dir_follow.normalize();
       clownX += dir_follow.x *5;
       clownY += dir_follow.y *5;
-      if(pow(kid_x - clownX,2) + pow(kid_y - clownY,2) - 30 <= 0)
-          boy_is_dead = true;
   }
 /* if(following){
   
